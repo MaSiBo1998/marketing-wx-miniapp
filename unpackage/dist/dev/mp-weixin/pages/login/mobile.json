@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "手机号登录",
+  "usingComponents": {
+    "u-input": "/uni_modules/uview-ui/components/u-input/u-input"
+  }
+}

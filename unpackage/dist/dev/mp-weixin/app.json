@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/user/index",
+    "pages/login/authorize",
+    "pages/login/mobile",
+    "pages/active/index",
+    "pages/active/detail/index",
+    "pages/actorList/index",
+    "pages/actorList/actorDetail/index"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "backgroundColor": "#FFFFFF",
+    "color": "#8a8a8a",
+    "selectedColor": "#2c2c2c",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tabIcon/inactive-home.png",
+        "selectedIconPath": "static/tabIcon/active-home.png",
+        "enablePullDownRefresh": true
+      },
+      {
+        "pagePath": "pages/active/index",
+        "text": "活动招募",
+        "iconPath": "static/tabIcon/inactive-clock.png",
+        "selectedIconPath": "static/tabIcon/active-clock.png",
+        "enablePullDownRefresh": true
+      },
+      {
+        "pagePath": "pages/actorList/index",
+        "text": "演员例表",
+        "iconPath": "static/tabIcon/inactive-list.png",
+        "selectedIconPath": "static/tabIcon/active-list.png",
+        "enablePullDownRefresh": true
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "static/tabIcon/inactive-user.png",
+        "selectedIconPath": "static/tabIcon/active-user.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
