@@ -140,6 +140,7 @@
 	.content {
 		padding-top: 200rpx;
 		height: 100vh;
+		box-sizing: border-box;
 
 		.avatar-img {
 			display: block;

@@ -71,7 +71,7 @@
 			return {
 				showDetail: false,
 				currentTab: 0,
-				avatarUrl: '/static/default-avatar.png',
+				avatarUrl: '',
 				userInfo: {
 					name: '张三',
 					gender: '男',

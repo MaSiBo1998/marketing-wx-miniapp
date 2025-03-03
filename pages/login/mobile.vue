@@ -47,7 +47,7 @@
 <style lang="scss" scoped>
 	.content {
 		padding-top: 52rpx;
-
+box-sizing: border-box;
 		.content-title {
 			width: 626rpx;
 			margin: 0 auto;
