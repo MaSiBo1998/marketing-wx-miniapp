@@ -1,17 +1,17 @@
 <template>
 	<view class="content">
 		<view class="active-detail-top">
-			<image class="active-img" src="@/static/active/active-img.png" mode="widthFix"></image>
+			<image class="active-img" :src="detail.coverImage" mode="widthFix"></image>
 			<view class="active-box-title">
-				活动主题活动主体
+				{{detail.name}}
 			</view>
 			<view class="active-box-info">
-				本活动内容简介内容简介内容简介本活动内容简介内容简介内容简介本活动内容简介内容简介内容简介简介本活动内容简介内容
+				{{detail.subject}}
 			</view>
 			<view class="active-box-bottom">
 				<view class="active-box-bottom-left">
-					活动时间:2025-03-01-04-01 <br>
-					报名截止: 2025-02-28
+					活动时间:{{detail.activityStartTime}}-{{detail.activityEndTime}}<br>
+					报名截止: {{detail.registrationDeadline}}
 				</view>
 			</view>
 		</view>
@@ -27,11 +27,11 @@
 				详情
 			</view>
 			<view class="detail-box-top-right">
-				需求人数:55人 | 已录用: 50人 | 剩余5人
+				需求人数:{{detail.requiredTotalNumber}}人 | 已录用: {{detail.requiredMaleNumber}}人 | 剩余{{detail.requiredFemaleNumber}}人
 			</view>
 		</view>
 		<view class="detail-box-info">
-			华侨城文化演艺有限公司成立于2001年，是中央大型文旅企业华侨城集团文化业务板块核心成员。20多年来，公司围绕主题精品剧目、情景特技秀、大型主题节庆、大型文化晚会等业务方向，创作了一批演艺精品，逐步发展为高品质、独具标识性与市场竞争力的文化演艺企业。在专业化整合的新趋势下，文化演艺公司战略布局内容生产和渠道整合，聚焦演艺经纪和精品演艺两大核心赛道，推动华侨城演艺品牌升级，树立业内标杆，致力于将华侨城演艺打造成为兼具影响力与专业度的文化品牌。
+			{{detail.detailDesc}}
 		</view>
 		<view class="subtim-bottom">
 			<view class="subtim-bottom-left">
@@ -55,7 +55,7 @@
 		onShow(option) {},
 		data() {
 			return {
-				searchVal: '',
+				detail:{},
 			}
 		},
 		computed: {},
@@ -72,6 +72,7 @@
 			uni.setNavigationBarTitle({
 				title: uni.getStorageSync('active_detail').name
 			});
+			this.detail = uni.getStorageSync('active_detail')
 		}
 	}
 </script>
@@ -166,6 +167,7 @@
 			font-weight: 600;
 			color: black;
 			line-height: 1.6;
+			overflow-wrap: break-word;
 		}
 
 		.subtim-bottom {

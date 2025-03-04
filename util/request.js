@@ -1,4 +1,4 @@
-export const baseURL = 'https://apinew.duoduoyuan.cn'
+export const baseURL = 'http://xcxapi.yiwaixiao.net'
 
 export const request = (options) => {
 	return new Promise((resolve, reject) => {
@@ -7,8 +7,8 @@ export const request = (options) => {
 			method: options.method || 'GET', //请求方法：传入的方法或者默认是“GET”
 			data: options.data || {}, //传递参数：传入的参数或者默认传递空集合
 			header: {
-				'content-type': 'application/x-www-form-urlencoded;',
-				'token': options.token
+				'content-type': 'application/json;',
+				'token': 'dad0ca2e3653438ba8de114b1f2fabde',// options.token
 			},
 			success: (res) => {
 				if (res.data.code == 0 ) {
@@ -23,13 +23,11 @@ export const request = (options) => {
 							icon: 'none',
 							duration: 1200
 						})
-						uni.clearStorage()
-						// setTimeout(()=> {
-						// 	uni.navigateTo({
-						// 		url: '/pages/login/index'
-						// 	})
-						// 	uni.clearStorageSync()
-						// },1000)
+						setTimeout(()=> {
+							uni.navigateTo({
+								url: '/pages/login/authorize'
+							})
+						},1000)
 						return false
 						
 					}

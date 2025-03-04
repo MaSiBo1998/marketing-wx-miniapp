@@ -1,0 +1,21 @@
+import {
+	request
+} from '@/util/request.js'
+//新增演员
+export const addActor = (data) => request({
+	url: '/mini/actor/add',
+	method: 'post',
+	data
+})
+//编辑演员
+export const editActor = (data) => request({
+	url: '/mini/actor/edit',
+	method: 'post',
+	data
+})
+//获取演员详情
+export const getActorOne = (data) => request({
+	url: '/mini/actor/getOne',
+	method: 'post',
+	data
+})

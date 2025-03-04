@@ -2,12 +2,7 @@ import {
 	request
 } from '@/util/request.js'
 
-//手机号登录
-export const mobileToLogin = (data) => request({
-	url: '/user/loginByMobile',
-	method: 'post',
-	data: data
-})
+
 //微信登录获取openid
 export const wxLoginGetOpenid = (data) => request({
 	url: '/user/loginByWx',
@@ -18,14 +13,12 @@ export const wxLoginGetOpenid = (data) => request({
 		wxNickName:data.wxNickName,
 	}
 })
-//微信登录获取openid
-export const wxLoginGetMobile = (data) => request({
-	url: '/user/getMobileByWx',
+
+//获取演员详情
+export const addActor = (data) => request({
+	url: '//mini/actor/getOne',
 	method: 'post',
-	token:data.token,
-	data: {
-		wxCode:data.wxCode
-	}
+	data
 })
 // 退出登录
 export const loginOut = (data) => request({

@@ -38,7 +38,7 @@
 					</view>
 				
 				</view>
-				<image class="actor-box-top-right" src="@/static/home/home-top-banner.png" mode="widthFix"></image>
+				<image class="actor-box-top-right" src="" mode="widthFix"></image>
 				
 			</view>
 			<view class="actor-detail-title">

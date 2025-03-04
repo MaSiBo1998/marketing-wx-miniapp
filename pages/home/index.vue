@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<image class="home-top-banner" src="@/static/home/home-top-banner.png" mode="widthFix"></image>
+		<image class="home-top-banner" src="" mode="widthFix"></image>
 		<view class="notice-box">
 			<view class="notice-box-in">
 				<view class="notic-box-left">
@@ -10,7 +10,7 @@
 			</view>
 		</view>
 		<view class="company-detail">
-			<image class="company-detail-img" src="@/static/home/company-detail.png" mode="widthFix"></image>
+			<image class="company-detail-img" src="" mode="widthFix"></image>
 			<view class="company-tips">
 				华侨城文化演艺有限公司成立于2001年，是中央大型文旅企业华侨城集团文化业务板块核心成员。20多年来，公司围绕主题精品剧目、情景特技秀、大型主题节庆、大型文化晚会等业务方向，创作了一批演艺精品，逐步发展为高品质、独具标识性与市场竞争力的文化演艺企业。在专业化整合的新趋势下，文化演艺公司战略布局内容生产和渠道整合，聚焦演艺经纪和精品演艺两大核心赛道，推动华侨城演艺品牌升级，树立业内标杆，致力于将华侨城演艺打造成为兼具影响力与专业度的文化品牌。
 			</view>
@@ -27,10 +27,10 @@
 					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
 				</view>
 			</view>
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 		</view>
 		<view class="case-box">
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 			<view class="case-info">
 				<view class="case-info-title">
 					大型民族服饰舞蹈诗《东方霓裳》
@@ -50,10 +50,10 @@
 					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
 				</view>
 			</view>
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 		</view>
 		<view class="case-box">
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 			<view class="case-info">
 				<view class="case-info-title">
 					大型民族服饰舞蹈诗《东方霓裳》
@@ -73,10 +73,10 @@
 					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
 				</view>
 			</view>
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 		</view>
 		<view class="case-box">
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 			<view class="case-info">
 				<view class="case-info-title">
 					大型民族服饰舞蹈诗《东方霓裳》
@@ -96,10 +96,10 @@
 					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
 				</view>
 			</view>
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 		</view>
 		<view class="case-box">
-			<image class="case-img" src="@/static/home/case-img.png" mode="widthFix"></image>
+			<image class="case-img" src="" mode="widthFix"></image>
 			<view class="case-info">
 				<view class="case-info-title">
 					大型民族服饰舞蹈诗《东方霓裳》

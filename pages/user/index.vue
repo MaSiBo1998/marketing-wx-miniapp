@@ -24,79 +24,92 @@
                 年龄：
             </view>
         </u-input>
-        <u-input :disabled="!isEdit" v-model="userInfo.height" border="none" placeholder="请输入身高">
-            <view class="input-info" slot="prefix">
-                身高：
-            </view>
-            <view class="input-info" slot="suffix">
-                cm
-            </view>
-        </u-input>
-        <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入体重">
-            <view class="input-info" slot="prefix">
-                体重：
-            </view>
-            <view class="input-info" slot="suffix">
-                kg
-            </view>
-        </u-input>
-        <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入从业年限">
-            <view class="input-info" slot="prefix">
-                从业年限：
-            </view>
-            <view class="input-info" slot="suffix">
-                年
-            </view>
-        </u-input>
-        <view class="user-info-item">
-            <view class="user-info-item-left">
-                特长：
-            </view>
-            <view class="user-info-item-right">
-                <u-checkbox-group  v-model="userInfo.checkboxList"
-                    @change="handleCheckboxChange">
-                    <u-checkbox :customStyle="{marginRight: '8px',marginBottom:'8px'}"
-                        v-for="(item, index) in checkboxList1" :key="index" :label="item.label" :name="item.value">
-                    </u-checkbox>
-                </u-checkbox-group>
-            </view>
-        </view>
-        <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入毕业院校">
-            <view class="input-info" slot="prefix">
-                毕业院校：
-            </view>
-        </u-input>
-        <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入过往经历">
-            <view class="input-info" slot="prefix">
-                过往经历：
-            </view>
-        </u-input>
-        <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入演出案例">
-            <view class="input-info" slot="prefix">
-                演出案例：
-            </view>
-        </u-input>
-        <view class="user-info-item">
-            <view class="user-info-item-left">
-                代表图：
-            </view>
-            <view class="user-info-item-right">
-                <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
-                    :maxCount="10"></u-upload>
-            </view>
-        </view>
-        <view class="user-info-item">
-            <view class="user-info-item-left" style="width: 180rpx;">
-                视频片段：
-            </view>
-            <view class="user-info-item-right">
-                <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
-                    :maxCount="1"></u-upload>
-            </view>
-        </view>
+		<u-collapse ref="collapseRef" :border="false" accordion  :value="activeNames"
+		    
+		  >
+		    <u-collapse-item
+		      title="查看更多"
+		      name="first"
+		    >
+		      <u-input :disabled="!isEdit" v-model="userInfo.height" border="none" placeholder="请输入身高">
+		          <view class="input-info" slot="prefix">
+		              身高：
+		          </view>
+		          <view class="input-info" slot="suffix">
+		              cm
+		          </view>
+		      </u-input>
+		      <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入体重">
+		          <view class="input-info" slot="prefix">
+		              体重：
+		          </view>
+		          <view class="input-info" slot="suffix">
+		              kg
+		          </view>
+		      </u-input>
+		      <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入从业年限">
+		          <view class="input-info" slot="prefix">
+		              从业年限：
+		          </view>
+		          <view class="input-info" slot="suffix">
+		              年
+		          </view>
+		      </u-input>
+		      <view class="user-info-item">
+		          <view class="user-info-item-left">
+		              特长：
+		          </view>
+		          <view class="user-info-item-right">
+		              <u-checkbox-group :disabled="!isEdit"  :value="userInfo.checkboxList"
+		                  @change="handleCheckboxChange">
+		                  <u-checkbox :labelDisabled="false" activeColor="#3D8D7A" :customStyle="{marginRight: '8px',marginBottom:'8px'}"
+		                      v-for="(item, index) in checkboxList1" :key="index" :label="item.label" :name="item.value">
+		                  </u-checkbox>
+		              </u-checkbox-group>
+		          </view>
+		      </view>
+		      <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入毕业院校">
+		          <view class="input-info" slot="prefix">
+		              毕业院校：
+		          </view>
+		      </u-input>
+		      <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入过往经历">
+		          <view class="input-info" slot="prefix">
+		              过往经历：
+		          </view>
+		      </u-input>
+		      <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入演出案例">
+		          <view class="input-info" slot="prefix">
+		              演出案例：
+		          </view>
+		      </u-input>
+		      <view class="user-info-item">
+		          <view class="user-info-item-left" style="width: 180rpx;">
+		              代表图：
+		          </view>
+		          <view class="user-info-item-right">
+		              <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
+		                  :maxCount="10"></u-upload>
+		          </view>
+		      </view>
+		      <view class="user-info-item">
+		          <view class="user-info-item-left" style="width: 180rpx;">
+		              视频片段：
+		          </view>
+		          <view class="user-info-item-right">
+		              <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
+		                  :maxCount="1"></u-upload>
+		          </view>
+		      </view>
+		    </u-collapse-item>
+		  </u-collapse>
+        
         <view class="login-btn" @click="toSubmit()">
         	{{ !isEdit?"编辑个人信息":'提交'}}
         </view>
+		<view class="login-btn" style="background: #B3D8A8;" v-if="isEdit" @click="isEdit = false">
+			取消
+		</view>
         <!-- 报名状态切换 -->
         <u-tabs style="margin: 32rpx auto;" :list="tabList" :current="currentTab" @change="changeTab"
             activeColor="#3D8D7A" barWidth="60"></u-tabs>
@@ -109,14 +122,17 @@
                 </u-list-item>
             </u-list>
         </view>
+		<u-toast ref="uToast"></u-toast>
     </view>
 </template>
 
 <script>
+	import {getActorOne} from '@/api/actor.js'
     export default {
         data() {
             return {
                 isEdit: false,
+				activeNames: '',
                 showDetail: false,
                 currentTab: 0,
                 avatarUrl: '',
@@ -135,31 +151,31 @@
                     video: []
                 },
                 checkboxList1: [{
-                        label: '舞蹈',
+                        label: '舞蹈1',
                         value: 'dance'
                     },
                     {
-                        label: '声乐',
+                        label: '声乐2',
                         value: 'music'
                     },
                     {
-                        label: '表演',
+                        label: '表演3',
                         value: 'acting'
                     },
                     {
-                        label: '乐器',
+                        label: '乐器4',
                         value: '1'
                     },
                     {
-                        label: '乐器',
+                        label: '乐器5',
                         value: 'inst2rument'
                     },
                     {
-                        label: '乐器',
+                        label: '乐器6',
                         value: 'instr3ument'
                     },
                     {
-                        label: '乐器',
+                        label: '乐器7',
                         value: '5'
                     }
                 ],
@@ -192,32 +208,55 @@
         onShow() {
           this.isEdit = false  
         },
+		onLoad() {
+			this.getActorOne()
+		},
         filters: {
             statusFilter(status) {
                 return status ? '已参与' : '未参与'
             }
         },
         methods: {
+			getActorOne(){
+				let params = {
+					id:1,
+				}
+				getActorOne(params).then(res =>{
+					console.log(res)
+				})
+			},
             toPage() {
                 uni.navigateTo({
                     url: '/pages/login/authorize'
                 })
             },
             handleCheckboxChange(selectedValues) {
-                console.log(selectedValues)
+                
               if (selectedValues.length > 3) {
-                // 方案1：自动保留前3个选中项
-                this.$set(this.userInfo,'checkboxList',selectedValues.slice(0, 3))
-                // 方案2：提示用户并回退到上一次状态
-                alert('只能选三个')
-                this.$forceUpdate()
-                console.log(this.userInfo.checkboxList)
-                return;
-              }
-              // 正常更新数据
-              this.userInfo.checkboxList = selectedValues;
+				// let arr = selectedValues.slice(0, 3)
+				// this.$set(this.userInfo,'checkboxList', selectedValues.slice(0, 3))
+				this.userInfo.checkboxList.splice(3)
+				uni.showToast({
+					title: '最多选择三个',
+					icon:'none',
+					duration: 1500
+				});
+				return 
+
+              }else{
+				  // 正常更新数据
+				  this.userInfo.checkboxList = selectedValues;
+			  }
+              
             },
             toSubmit(){
+				// this.activeNames = this.activeNames.includes('first') ? [] : ['first'],
+				this.$nextTick(() => {
+				    this.activeNames = 'first'
+				    setTimeout(() => this.$refs.collapseRef.init(), 200);
+				  });
+				// this.tagName[0] = 1
+				console.log(this.activeNames)
               if(!this.isEdit){
                   this.isEdit = !this.isEdit
               }else{
@@ -270,9 +309,9 @@
     }
     .login-btn {
     	margin: 16rpx auto 0 ;
-    	width: 626rpx;
-    	height: 96rpx;
-    	line-height: 96rpx;
+    	width: 586rpx;
+    	height: 88rpx;
+    	line-height: 88rpx;
     	border-radius: 36rpx;
     	background: #3D8D7A;
     	text-align: center;
@@ -319,6 +358,22 @@
         background: #FFF !important;
         border-bottom: 1rpx solid rgb(213, 212, 218);
     }
+	/deep/.u-collapse-item {
+		width: 686rpx;
+		margin: 0 auto;
+	}
+	/deep/.u-cell__body {
+		padding: 32rpx 0 !important;
+		border-bottom: 1rpx solid rgb(213, 212, 218);
+	
+	}
+	/deep/.u-collapse-item__content__text {
+		padding: 0 !important;
+	}
+	/deep/.u-line {
+		width: 686rpx;
+		 
+	}
 
     .input-info {
         padding-right: 20rpx;

@@ -12,20 +12,20 @@
 				全部分类
 			</view>
 		</view>
-		<view class="active-box" v-for="item,index in list" :key="index">
-			<image class="active-img" src="@/static/active/active-img.png" mode="widthFix"></image>
+		<view class="active-box" v-for="item,index in list" :key="index" @click.stop="toActivePage(item)">
+			<image class="active-img" :src="item.coverImage" mode="widthFix"></image>
 			<view class="active-box-title">
 				{{item.name}}
 			</view>
 			<view class="active-box-info">
-				{{item.info}}
+				{{item.subject}}
 			</view>
 			<view class="active-box-bottom">
 				<view class="active-box-bottom-left">
-					活动时间:{{item.time}} <br>
-					报名截止: {{item.delineTime}}
+					活动时间:{{item.activityStartTime}}-{{item.activityEndTime}} <br>
+					报名截止: {{item.registrationDeadline}}
 				</view>
-				<view class="active-box-bottom-right" @click="toActivePage(item)">
+				<view class="active-box-bottom-right">
 					立即报名
 				</view>
 			</view>
@@ -35,10 +35,8 @@
 
 <script>
 	import {
-		getMyInfoData,
-		getAddressBylat,
-		loginOut
-	} from '@/util/api.js'
+		getActiveList
+	} from '@/api/active.js'
 	export default {
 		onShow(option) {},
 		data() {
@@ -53,8 +51,19 @@
 			}
 		},
 		computed: {},
-		created() {},
+		onLoad() {
+			this.getActiveList()
+		},
 		methods: {
+			getActiveList(){
+				let params = {
+					pageSize:10,
+					pageNum: 1
+				}
+				getActiveList(params).then(res =>{
+					this.list = res.dataList
+				})
+			},
 			toActivePage(data) {
 				uni.setStorageSync('active_detail',data)
 				uni.navigateTo({
@@ -62,9 +71,6 @@
 				})
 			}
 		},
-		onLoad() {
-
-		}
 	}
 </script>
 
@@ -111,7 +117,8 @@
 			width: 686rpx;
 			margin: 0 auto 16rpx;
 			border-bottom: 2rpx solid #f5f5f5;
-
+padding-bottom: 15rpx;
+box-sizing: border-box;
 			.active-img {
 				width: 686rpx;
 				display: block;
@@ -120,18 +127,23 @@
 			.active-box-title {
 				font-size: 36rpx;
 				font-weight: 600;
+				width: 686rpx;
 				margin: 16rpx 0 6rpx;
 				text-align: left;
 			}
 
 			.active-box-info {
 				font-size: 22rpx;
+				width: 686rpx;
 				text-align: left;
 				font-weight: 500;
+				margin: 6rpx 0 16rpx;
+				overflow-wrap: break-word;
+				
 			}
 
 			.active-box-bottom {
-				margin: 16rpx auto;
+				margin: 0 auto;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
@@ -143,7 +155,7 @@
 				}
 
 				.active-box-bottom-right {
-					background-color: rgb(51, 51, 51);
+					background: #3D8D7A;
 					padding: 0 32rpx;
 					height: 64rpx;
 					line-height: 64rpx;
