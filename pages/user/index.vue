@@ -1,234 +1,366 @@
 <template>
-	<view class="container">
-		<!-- 用户信息头部 -->
-		<view class="user-header">
-			<u-avatar :src="avatarUrl" size="120" mode="aspectFill" @click="uploadAvatar" class="avatar"></u-avatar>
-			<view class="user-info">
-				<view class="user-name" @click="handleBind">
-					{{ userInfo.name || '点击绑定微信/手机' }}
-					<u-icon name="edit-pen" color="#666" size="28"></u-icon>
-				</view>
-			</view>
-		</view>
-		<button @click="toPage()">跳转</button>
+    <view class="container">
+        <!-- 用户信息头部 -->
+        <view class="user-header">
+            <image class="avatar-img" src="https://img.js.design/assets/img/624fdbbf79ea51291deaea2d.png" mode="">
+            </image>
+            <view class="user-header-right">
+                <view class="user-header-right-name">
+                    小橙子
+                </view>
+                <view class="user-header-right-mobile">
+                    150154454545
+                </view>
+            </view>
+        </view>
+        <!-- <button @click="toPage()">跳转</button> -->
+        <u-input :disabled="!isEdit" v-model="userInfo.gender" border="none" placeholder="请选择性别">
+            <view class="input-info" slot="prefix">
+                性别：
+            </view>
+        </u-input>
+        <u-input :disabled="!isEdit" v-model="userInfo.mobile" border="none" placeholder="请输入年龄">
+            <view class="input-info" slot="prefix">
+                年龄：
+            </view>
+        </u-input>
+        <u-input :disabled="!isEdit" v-model="userInfo.height" border="none" placeholder="请输入身高">
+            <view class="input-info" slot="prefix">
+                身高：
+            </view>
+            <view class="input-info" slot="suffix">
+                cm
+            </view>
+        </u-input>
+        <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入体重">
+            <view class="input-info" slot="prefix">
+                体重：
+            </view>
+            <view class="input-info" slot="suffix">
+                kg
+            </view>
+        </u-input>
+        <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入从业年限">
+            <view class="input-info" slot="prefix">
+                从业年限：
+            </view>
+            <view class="input-info" slot="suffix">
+                年
+            </view>
+        </u-input>
+        <view class="user-info-item">
+            <view class="user-info-item-left">
+                特长：
+            </view>
+            <view class="user-info-item-right">
+                <u-checkbox-group  v-model="userInfo.checkboxList"
+                    @change="handleCheckboxChange">
+                    <u-checkbox :customStyle="{marginRight: '8px',marginBottom:'8px'}"
+                        v-for="(item, index) in checkboxList1" :key="index" :label="item.label" :name="item.value">
+                    </u-checkbox>
+                </u-checkbox-group>
+            </view>
+        </view>
+        <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入毕业院校">
+            <view class="input-info" slot="prefix">
+                毕业院校：
+            </view>
+        </u-input>
+        <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入过往经历">
+            <view class="input-info" slot="prefix">
+                过往经历：
+            </view>
+        </u-input>
+        <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入演出案例">
+            <view class="input-info" slot="prefix">
+                演出案例：
+            </view>
+        </u-input>
+        <view class="user-info-item">
+            <view class="user-info-item-left">
+                代表图：
+            </view>
+            <view class="user-info-item-right">
+                <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
+                    :maxCount="10"></u-upload>
+            </view>
+        </view>
+        <view class="user-info-item">
+            <view class="user-info-item-left" style="width: 180rpx;">
+                视频片段：
+            </view>
+            <view class="user-info-item-right">
+                <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
+                    :maxCount="1"></u-upload>
+            </view>
+        </view>
+        <view class="login-btn" @click="toSubmit()">
+        	{{ !isEdit?"编辑个人信息":'提交'}}
+        </view>
+        <!-- 报名状态切换 -->
+        <u-tabs style="margin: 32rpx auto;" :list="tabList" :current="currentTab" @change="changeTab"
+            activeColor="#3D8D7A" barWidth="60"></u-tabs>
 
-		<!-- 基本信息卡片 -->
-		<u-card :title="'基本信息'" :border="false" margin="20rpx 0">
-			<view slot="body">
-				<u-cell-group :border="false">
-					<u-cell title="性别" :value="userInfo.gender || '未填写'" :arrow="false"></u-cell>
-					<u-cell title="年龄" :value="userInfo.age + '岁'" :arrow="false"></u-cell>
-					<u-cell title="查看详细信息" :isLink="true" @click="showDetail = !showDetail">
-						<u-icon :name="showDetail ? 'arrow-up' : 'arrow-down'" slot="right-icon"></u-icon>
-					</u-cell>
-				</u-cell-group>
-
-				<!-- 详细信息展开 -->
-				<view v-if="showDetail" class="detail-section">
-					<u-form :model="userInfo" labelWidth="160">
-						<u-form-item label="身高" prop="height">
-							<u-input v-model="userInfo.height" placeholder="请输入身高" suffix="cm" />
-						</u-form-item>
-						<u-form-item label="体重" prop="weight">
-							<u-input v-model="userInfo.weight" placeholder="请输入体重" suffix="kg" />
-						</u-form-item>
-						<u-form-item label="特长" prop="skills">
-							<u-checkbox-group v-model="userInfo.skills" :max="3">
-								<u-checkbox v-for="(item, index) in skillOptions" :key="index"
-									:name="item.value">{{ item.label }}</u-checkbox>
-							</u-checkbox-group>
-						</u-form-item>
-						<u-form-item label="代表图" prop="images">
-							<u-upload :fileList="userInfo.images" @afterRead="handleImageUpload"
-								@delete="handleImageDelete" multiple :maxCount="10" previewFullImage></u-upload>
-						</u-form-item>
-						<u-form-item label="视频片段" prop="video">
-							<u-upload :fileList="userInfo.video" @afterRead="handleVideoUpload"
-								@delete="handleVideoDelete" :maxCount="1" accept="video"></u-upload>
-						</u-form-item>
-					</u-form>
-				</view>
-			</view>
-		</u-card>
-
-		<!-- 报名状态切换 -->
-		<u-tabs :list="tabList" :current="currentTab" @change="changeTab" activeColor="#2979ff" barWidth="60"></u-tabs>
-
-		<!-- 报名列表 -->
-		<view class="signup-list">
-			<u-list>
-				<u-list-item v-for="(item, index) in currentList" :key="index">
-					<u-cell :title="item.title" :value="item.status | statusFilter" :label="item.time"></u-cell>
-				</u-list-item>
-			</u-list>
-		</view>
-	</view>
+        <!-- 报名列表 -->
+        <view class="signup-list">
+            <u-list>
+                <u-list-item v-for="(item, index) in currentList" :key="index">
+                    <u-cell :title="item.title" :value="item.status | statusFilter" :label="item.time"></u-cell>
+                </u-list-item>
+            </u-list>
+        </view>
+    </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				showDetail: false,
-				currentTab: 0,
-				avatarUrl: '',
-				userInfo: {
-					name: '张三',
-					gender: '男',
-					age: 31,
-					height: '170',
-					weight: '62',
-					skills: [],
-					images: [],
-					video: []
-				},
-				skillOptions: [{
-						label: '舞蹈',
-						value: 'dance'
-					},
-					{
-						label: '声乐',
-						value: 'music'
-					},
-					{
-						label: '表演',
-						value: 'acting'
-					},
-					{
-						label: '乐器',
-						value: 'instrument'
-					}
-				],
-				tabList: [{
-						name: '已参与',
-						count: 2
-					},
-					{
-						name: '未参与',
-						count: 5
-					}
-				],
-				currentList: [{
-						title: '音乐会演出',
-						status: 1,
-						time: '2023-08-15'
-					},
-					{
-						title: '话剧表演',
-						status: 0,
-						time: '2023-09-01'
-					}
-				]
-			}
-		},
-		filters: {
-			statusFilter(status) {
-				return status ? '已参与' : '未参与'
-			}
-		},
-		methods: {
-			toPage(){
-				uni.navigateTo({
-					url:'/pages/login/authorize'
-				})
-			},
-			// 上传头像
-			uploadAvatar() {
-				uni.chooseImage({
-					count: 1,
-					success: (res) => {
-						this.avatarUrl = res.tempFilePaths[0]
-					}
-				})
-			},
-			// 绑定操作
-			handleBind() {
-				uni.showActionSheet({
-					itemList: ['微信绑定', '手机绑定'],
-					success: (res) => {
-						console.log('绑定方式:', res.tapIndex)
-					}
-				})
-			},
-			// 图片上传处理
-			handleImageUpload(event) {
-				// 这里处理上传逻辑
-				this.userInfo.images = event.file
-			},
-			// 视频上传处理
-			handleVideoUpload(event) {
-				// 这里处理上传逻辑
-				this.userInfo.video = event.file
-			},
-			// 切换tab
-			changeTab(index) {
-				this.currentTab = index
-				// 这里根据tab切换列表数据
-			}
-		}
-	}
+    export default {
+        data() {
+            return {
+                isEdit: false,
+                showDetail: false,
+                currentTab: 0,
+                avatarUrl: '',
+                fileList1:[],
+                userInfo: {
+                    name: '张三',
+                    gender: '男',
+                    age: 31,
+                    height: '170',
+                    weight: '62',
+                    mobile: 123213123123,
+                    university: '清华',
+                    skills: [],
+                    images: [],
+                    checkboxList: [],
+                    video: []
+                },
+                checkboxList1: [{
+                        label: '舞蹈',
+                        value: 'dance'
+                    },
+                    {
+                        label: '声乐',
+                        value: 'music'
+                    },
+                    {
+                        label: '表演',
+                        value: 'acting'
+                    },
+                    {
+                        label: '乐器',
+                        value: '1'
+                    },
+                    {
+                        label: '乐器',
+                        value: 'inst2rument'
+                    },
+                    {
+                        label: '乐器',
+                        value: 'instr3ument'
+                    },
+                    {
+                        label: '乐器',
+                        value: '5'
+                    }
+                ],
+                tabList: [{
+                        name: '我的报名',
+                        count: 2
+                    },
+                    {
+                        name: '已参与',
+                        count: 5
+                    },
+                    {
+                        name: '未参与',
+                        count: 5
+                    }
+                ],
+                currentList: [{
+                        title: '音乐会演出',
+                        status: 1,
+                        time: '2023-08-15'
+                    },
+                    {
+                        title: '话剧表演',
+                        status: 0,
+                        time: '2023-09-01'
+                    }
+                ]
+            }
+        },
+        onShow() {
+          this.isEdit = false  
+        },
+        filters: {
+            statusFilter(status) {
+                return status ? '已参与' : '未参与'
+            }
+        },
+        methods: {
+            toPage() {
+                uni.navigateTo({
+                    url: '/pages/login/authorize'
+                })
+            },
+            handleCheckboxChange(selectedValues) {
+                console.log(selectedValues)
+              if (selectedValues.length > 3) {
+                // 方案1：自动保留前3个选中项
+                this.$set(this.userInfo,'checkboxList',selectedValues.slice(0, 3))
+                // 方案2：提示用户并回退到上一次状态
+                alert('只能选三个')
+                this.$forceUpdate()
+                console.log(this.userInfo.checkboxList)
+                return;
+              }
+              // 正常更新数据
+              this.userInfo.checkboxList = selectedValues;
+            },
+            toSubmit(){
+              if(!this.isEdit){
+                  this.isEdit = !this.isEdit
+              }else{
+                  
+              }
+            },
+            // 上传头像
+            uploadAvatar() {
+                uni.chooseImage({
+                    count: 1,
+                    success: (res) => {
+                        this.avatarUrl = res.tempFilePaths[0]
+                    }
+                })
+            },
+            // 绑定操作
+            handleBind() {
+                uni.showActionSheet({
+                    itemList: ['微信绑定', '手机绑定'],
+                    success: (res) => {
+                        console.log('绑定方式:', res.tapIndex)
+                    }
+                })
+            },
+            // 图片上传处理
+            handleImageUpload(event) {
+                // 这里处理上传逻辑
+                this.userInfo.images = event.file
+            },
+            // 视频上传处理
+            handleVideoUpload(event) {
+                // 这里处理上传逻辑
+                this.userInfo.video = event.file
+            },
+            // 切换tab
+            changeTab(data) {
+                this.currentTab = data.count
+                // 这里根据tab切换列表数据
+            }
+        }
+    }
 </script>
 
 <style lang="scss" scoped>
-	.container {
-		background-color: #f5f7fa;
-		min-height: 100vh;
-		padding: 30rpx;
-	}
+    .container {
+        background-color: #FFF;
+        // min-height: 100vh;
+        padding-top: 80rpx;
+        box-sizing: border-box;
+    }
+    .login-btn {
+    	margin: 16rpx auto 0 ;
+    	width: 626rpx;
+    	height: 96rpx;
+    	line-height: 96rpx;
+    	border-radius: 36rpx;
+    	background: #3D8D7A;
+    	text-align: center;
+    	color: #FFF;
+    }
 
-	.user-header {
-		background: #ffffff;
-		border-radius: 20rpx;
-		padding: 40rpx;
-		display: flex;
-		align-items: center;
-		box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    .user-header {
+        width: 686rpx;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
 
-		.avatar {
-			margin-right: 40rpx;
-			border: 4rpx solid #fff;
-			box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.1);
-		}
+        .avatar-img {
+            width: 166rpx;
+            height: 166rpx;
+            border-radius: 50%;
+            margin-right: 20rpx;
+        }
 
-		.user-name {
-			font-size: 36rpx;
-			font-weight: 600;
-			color: #303133;
-			display: flex;
-			align-items: center;
-			gap: 20rpx;
-		}
-	}
+        .user-header-right {
 
-	.detail-section {
-		padding: 20rpx 0;
+            .user-header-right-name {
+                font-size: 46rpx;
+                font-weight: 600;
+                color: rgba(51, 51, 51, 1);
+                margin-bottom: 16rpx;
+            }
 
-		/deep/ .u-form-item {
-			padding: 24rpx 0;
-			border-bottom: 1rpx solid #ebeef5;
+            .user-header-right-mobile {
+                color: rgba(153, 153, 153, 1);
+                font-size: 32rpx;
+            }
+        }
+    }
 
-			&:last-child {
-				border-bottom: none;
-			}
-		}
-	}
+    /deep/.u-input {
+        width: 686rpx;
+        height: 100rpx;
+        margin: 0 auto;
+        border-radius: 0;
+        box-sizing: border-box;
+        padding: 32rpx 32rpx 32rpx 0 !important;
+        background: #FFF !important;
+        border-bottom: 1rpx solid rgb(213, 212, 218);
+    }
 
-	.signup-list {
-		margin-top: 30rpx;
-		background: #fff;
-		border-radius: 16rpx;
+    .input-info {
+        padding-right: 20rpx;
 
-		/deep/ .u-cell {
-			padding: 28rpx 32rpx;
-		}
-	}
+        .code-img {
+            width: 56rpx;
+        }
+    }
 
-	.u-card {
-		border-radius: 16rpx !important;
-		overflow: hidden;
+    .user-info-item {
+        width: 686rpx;
+        margin: 0 auto;
+        border-bottom: 1rpx solid rgb(213, 212, 218);
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        // height: 100rpx;
+        padding: 32rpx 32rpx 32rpx 0 !important;
+        background: #FFF !important;
 
-		/deep/ .u-body {
-			padding: 0 !important;
-		}
-	}
+        .user-info-item-left {
+            width: 120rpx;
+            box-sizing: border-box;
+        }
+
+        .user-info-item-right {
+            width: 560rpx;
+
+            /deep/.u-checkbox-group {
+                flex-wrap: wrap;
+
+            }
+        }
+    }
+
+    .signup-list {
+        margin-top: 30rpx;
+        background: #fff;
+        border-radius: 16rpx;
+
+        /deep/ .u-cell {
+            padding: 28rpx 32rpx;
+        }
+    }
 </style>
