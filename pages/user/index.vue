@@ -6,20 +6,31 @@
             </image>
             <view class="user-header-right">
                 <view class="user-header-right-name">
-                    小橙子
+                    {{userInfo.name}}
                 </view>
                 <view class="user-header-right-mobile">
-                    150154454545
+                    {{userInfo.phoneNumber}}
                 </view>
             </view>
         </view>
-        <!-- <button @click="toPage()">跳转</button> -->
-        <u-input :disabled="!isEdit" v-model="userInfo.gender" border="none" placeholder="请选择性别">
-            <view class="input-info" slot="prefix">
+        <view class="user-info-item" style="align-items: center;">
+            <view class="user-info-item-left" style="width: 120rpx;">
                 性别：
             </view>
-        </u-input>
-        <u-input :disabled="!isEdit" v-model="userInfo.mobile" border="none" placeholder="请输入年龄">
+            <view class="user-info-item-right" v-if="!isEdit">
+                {{userInfo.gender==1 ?'男':'女'}}
+            </view>
+            <view class="user-info-item-right" v-else>
+                <u-radio-group 
+                    v-model="userInfo.gender"
+                    placement="row">
+                	<u-radio style="margin-right: 15rpx;" activeColor="#3D8D7A" label="男" :name="1"></u-radio>
+                    <u-radio activeColor="#3D8D7A" label="女"  :name="0"></u-radio>
+                </u-radio-group>
+            </view>
+        </view>
+        <!-- <button @click="toPage()">跳转</button> -->
+        <u-input :disabled="!isEdit" v-model="userInfo.age" border="none" placeholder="请输入年龄">
             <view class="input-info" slot="prefix">
                 年龄：
             </view>
@@ -47,7 +58,7 @@
 		              kg
 		          </view>
 		      </u-input>
-		      <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入从业年限">
+		      <u-input :disabled="!isEdit" v-model="userInfo.workingYears" border="none" placeholder="请输入从业年限">
 		          <view class="input-info" slot="prefix">
 		              从业年限：
 		          </view>
@@ -68,17 +79,17 @@
 		              </u-checkbox-group>
 		          </view>
 		      </view>
-		      <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入毕业院校">
+		      <u-input :disabled="!isEdit" v-model="userInfo.graduationSchool" border="none" placeholder="请输入毕业院校">
 		          <view class="input-info" slot="prefix">
 		              毕业院校：
 		          </view>
 		      </u-input>
-		      <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入过往经历">
+		      <u-input :disabled="!isEdit" v-model="userInfo.pastExperiences" border="none" placeholder="请输入过往经历">
 		          <view class="input-info" slot="prefix">
 		              过往经历：
 		          </view>
 		      </u-input>
-		      <u-input :disabled="!isEdit" v-model="userInfo.university" border="none" placeholder="请输入演出案例">
+		      <u-input :disabled="!isEdit" v-model="userInfo.performanceCases" border="none" placeholder="请输入演出案例">
 		          <view class="input-info" slot="prefix">
 		              演出案例：
 		          </view>
@@ -87,18 +98,24 @@
 		          <view class="user-info-item-left" style="width: 180rpx;">
 		              代表图：
 		          </view>
-		          <view class="user-info-item-right">
+                  <view class="user-info-item-right" v-if="!isEdit">
+                       <u-album :urls="userInfo.coverImage.split(',')"></u-album>
+                  </view>
+		          <view class="user-info-item-right" v-else>
 		              <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
 		                  :maxCount="10"></u-upload>
 		          </view>
 		      </view>
 		      <view class="user-info-item">
-		          <view class="user-info-item-left" style="width: 180rpx;">
-		              视频片段：
+                  <view class="user-info-item-left" style="width: 180rpx;">
+                      视频片段：
+                  </view>
+		          <view class="user-info-item-right" v-if="!isEdit">
+		               <u-album :urls="userInfo.videoClipUrl"></u-album>
 		          </view>
-		          <view class="user-info-item-right">
+		          <view class="user-info-item-right" v-else>
 		              <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
-		                  :maxCount="1"></u-upload>
+		                  :maxCount="10"></u-upload>
 		          </view>
 		      </view>
 		    </u-collapse-item>
@@ -223,7 +240,7 @@
 				}
 				getActorOne(params).then(res =>{
 					console.log(res)
-                    this.userInfo = res.data
+                    this.userInfo = res
                     console.log(this.userInfo)
 				})
 			},
