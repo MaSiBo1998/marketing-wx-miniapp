@@ -1,6 +1,12 @@
 import {
 	request
 } from '@/util/request.js'
+//获取演员列表
+export const getActorList = (data) => request({
+	url: '/mini/registration/activityList',
+	method: 'post',
+	data
+})
 //新增演员
 export const addActor = (data) => request({
 	url: '/mini/actor/add',

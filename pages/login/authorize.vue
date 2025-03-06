@@ -4,9 +4,9 @@
 		<view class="login-btn" @click="toLogin()">
 			一键授权登录
 		</view>
-		<view class="change-mobile" @click="toMobileLogin()">
+		<!-- <view class="change-mobile" @click="toMobileLogin()">
 			切换手机号登录
-		</view>
+		</view> -->
 		<view class="bottom-tips">
 			<image class="active-icon" @click="isAgree = !isAgree" v-if="isAgree" src="@/static/login/active.png"
 				mode=""></image>

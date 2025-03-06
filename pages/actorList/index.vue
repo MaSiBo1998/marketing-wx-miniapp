@@ -61,12 +61,12 @@
 
 		},
 		onLoad() {
-			uni.authorize({
-			    scope: 'uni.getUserInfo',
-			    success() {
+			// uni.authorize({
+			//     scope: 'uni.getUserInfo',
+			//     success() {
 			        
-			    }
-			})
+			//     }
+			// })
 
 
 		}

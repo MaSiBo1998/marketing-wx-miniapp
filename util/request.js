@@ -8,7 +8,7 @@ export const request = (options) => {
 			data: options.data || {}, //传递参数：传入的参数或者默认传递空集合
 			header: {
 				'content-type': 'application/json;',
-				'token': 'dad0ca2e3653438ba8de114b1f2fabde',// options.token
+				'token': '86aee16367f349f28c8cc11a7f37a744',// options.token
 			},
 			success: (res) => {
 				if (res.data.code == 0 ) {
@@ -18,16 +18,16 @@ export const request = (options) => {
 				}
 				else {
 					if (res.data.code == 301) { //token过期
-						uni.showToast({
-							title: '更多功能,请先登录',
-							icon: 'none',
-							duration: 1200
-						})
-						setTimeout(()=> {
-							uni.navigateTo({
-								url: '/pages/login/authorize'
-							})
-						},1000)
+						// uni.showToast({
+						// 	title: '更多功能,请先登录',
+						// 	icon: 'none',
+						// 	duration: 1200
+						// })
+						// setTimeout(()=> {
+						// 	uni.navigateTo({
+						// 		url: '/pages/login/authorize'
+						// 	})
+						// },1000)
 						return false
 						
 					}

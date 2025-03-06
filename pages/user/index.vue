@@ -219,10 +219,12 @@
         methods: {
 			getActorOne(){
 				let params = {
-					id:1,
+					
 				}
 				getActorOne(params).then(res =>{
 					console.log(res)
+                    this.userInfo = res.data
+                    console.log(this.userInfo)
 				})
 			},
             toPage() {
