@@ -11,6 +11,7 @@ export const request = (options) => {
 				'token': '86aee16367f349f28c8cc11a7f37a744',// options.token
 			},
 			success: (res) => {
+				uni.hideLoading();
 				if (res.data.code == 0 ) {
 					resolve(res.data.data)
 				} else if (res.data.code == 600){
@@ -36,6 +37,7 @@ export const request = (options) => {
 			},
 			// 这里的接口请求，如果出现问题就输出接口请求失败
 			fail: (err) => {
+				uni.hideLoading();
 				reject(err)
 			}
 		})

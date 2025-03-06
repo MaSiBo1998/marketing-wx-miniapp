@@ -1,13 +1,13 @@
 <template>
 	<view class="content">
 		<view class="actor-item" v-for="item,index in list" :key="index" @click="toActorDetail(item)">
-			<image class="actor-item-img" :src="item.img" mode=""></image>
+			<image class="actor-item-img" :src="item.homeImage" mode=""></image>
 			<view class="actor-item-info">
 				<view class="actor-item-info-name">
 {{item.name}}
 				</view>
 				<view class="actor-item-info-detail">
-{{item.detail}}
+{{item.pastExperiences}}
 				</view>
 			</view>
 			<u-icon name="arrow-right" size="20"></u-icon>
@@ -17,59 +17,42 @@
 
 <script>
 	import {
-		getMyInfoData,
-		getAddressBylat,
-		loginOut
-	} from '@/util/api.js'
+		getActorList
+	} from '@/api/actor.js'
 	export default {
 		onShow(option) {},
 		data() {
 			return {
 				money: 123,
-				list: [{
-						name: '张三',
-						detail: '点击罚款猎杀对决法拉第随机发打卡了生发剂阿萨到啦',
-						img: '../../static/tabIcon/active-user.png'
-					},
-					{
-						name: '张三',
-						detail: '点击罚款猎杀对决法拉第随机发打卡了生发剂阿萨到啦',
-						img: '../../static/tabIcon/active-user.png'
-					},
-					{
-						name: '张三',
-						detail: '点击罚款猎杀对决法拉第随机发打卡了生发剂阿萨到啦',
-						img: '../../static/tabIcon/active-user.png'
-					},
-					{
-						name: '张三',
-						detail: '点击罚款猎杀对决法拉第随机发打卡了生发剂阿萨到啦',
-						img: '../../static/tabIcon/active-user.png'
-					}
+				list: [
 
 				],
 			}
 		},
-		created() {},
+		onLoad() {
+			this.getActorList()
+		
+		},
 		methods: {
 			toActorDetail(data){
 				uni.setStorageSync('actor_detail',data)
 				uni.navigateTo({
 					url:'/pages/actorList/actorDetail/index'
 				})
+			},
+			getActorList(){
+				let params = {
+					pageSize:10,
+					pageNum: 1
+				}
+				getActorList(params).then(res =>{
+					console.log(res)
+					this.list = res.dataList
+				})
 			}
 
 		},
-		onLoad() {
-			// uni.authorize({
-			//     scope: 'uni.getUserInfo',
-			//     success() {
-			        
-			//     }
-			// })
-
-
-		}
+		
 	}
 </script>
 
@@ -77,6 +60,7 @@
 	.content {
 		padding-top: 20rpx;
 		min-height: 100vh;
+		box-sizing: border-box;
 		background-color: rbg(244, 244, 244);
 
 		.actor-item {

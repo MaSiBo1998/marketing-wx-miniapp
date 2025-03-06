@@ -13,3 +13,9 @@ export const getActiveOne = (data) => request({
 	method: 'post',
 	data
 })
+//立即报名
+export const toSignUp = (data) => request({
+	url: '/mini/registration/add',
+	method: 'post',
+	data
+})

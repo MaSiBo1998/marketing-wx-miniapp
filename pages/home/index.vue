@@ -1,12 +1,12 @@
 <template>
 	<view class="content">
 		<image class="home-top-banner" src="" mode="widthFix"></image>
-		<view class="notice-box">
+		<view class="notice-box" v-if="noticeString">
 			<view class="notice-box-in">
 				<view class="notic-box-left">
 					正在演出
 				</view>
-				<u-notice-bar color="black" icon="" :text="text1"></u-notice-bar>
+				<u-notice-bar color="black" icon="" :text="noticeString"></u-notice-bar>
 			</view>
 		</view>
 		<view class="company-detail">
@@ -18,108 +18,26 @@
 		<view class="case-title">
 			经典案例
 		</view>
-		<view class="case-box">
+		<view class="case-box" v-for="item,index in caseList" :key="index">
 			<view class="case-info">
 				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
+					{{item.subject}}
 				</view>
 				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
+					{{item.detailDesc}}
 				</view>
 			</view>
-			<image class="case-img" src="" mode="widthFix"></image>
+			<image class="case-img" :src="item.coverImage" mode="widthFix"></image>
 		</view>
-		<view class="case-box">
-			<image class="case-img" src="" mode="widthFix"></image>
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			
-		</view>
-		<view class="case-box">
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			<image class="case-img" src="" mode="widthFix"></image>
-		</view>
-		<view class="case-box">
-			<image class="case-img" src="" mode="widthFix"></image>
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			
-		</view>
-		<view class="case-box">
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			<image class="case-img" src="" mode="widthFix"></image>
-		</view>
-		<view class="case-box">
-			<image class="case-img" src="" mode="widthFix"></image>
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			
-		</view>
-		<view class="case-box">
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			<image class="case-img" src="" mode="widthFix"></image>
-		</view>
-		<view class="case-box">
-			<image class="case-img" src="" mode="widthFix"></image>
-			<view class="case-info">
-				<view class="case-info-title">
-					大型民族服饰舞蹈诗《东方霓裳》
-				</view>
-				<view class="case-info-tips">
-					被誉为“东方惊艳”。集民族服饰、舞蹈、音乐和舞美于一体的大型民族服饰舞蹈诗。荣获2005年第五届中国舞蹈《荷花奖》舞蹈诗作品铜奖、第五届中国舞蹈《荷花奖》舞蹈诗表演铜奖。
-				</view>
-			</view>
-			
-		</view>
+
 	</view>
 </template>
 
 <script>
-	// import {
-	// 	getDatingOrder,
-	// 	getDatingNearbyOrder,
-	// 	masterToAcceptOrder,
-	// 	getAddressBylat
-	// } from '@/util/api.js'
+	import {
+		getActivePreviewList,
+		getCaseList
+	} from '@/api/home.js'
 	export default {
 		onLoad(options) {
 
@@ -139,13 +57,13 @@
 		},
 		data() {
 			return {
-				text1: '大型东方神话秀《金面王朝》(时间:2月21日8:30-20:30)',
+				previewList: [],
+				caseList: [],
 				isToken: false, //是否有token
 				searchValue: '', //搜索值
 				activeColor: '#6EB46C',
 				current: 0,
 				styleType: 'text',
-				TabList: ['全部订单', '附近订单'],
 				list: [
 
 				], //渲染列表
@@ -181,12 +99,57 @@
 				},
 			}
 		},
-		created() {
+		computed: {
+			noticeString() {
+				let arr = []
+				let string = ''
+				let timestamp = Date.now();
+				this.previewList.forEach(item => {
+					console.log(this.toTimestamp(item.activityStartTime), timestamp, this.toTimestamp(item
+						.activityEndTime))
+					if (this.toTimestamp(item.activityStartTime) < timestamp && timestamp < this.toTimestamp(item
+							.activityEndTime)) {
+						// arr.push(item)
+						string += item.subject
+					}
+				})
+				console.log(arr)
+				return string
+			},
+			textList() {
 
-
+			}
+		},
+		onLoad() {
+			this.getActivePreviewList()
+			this.getCaseList()
 
 		},
 		methods: {
+			toTimestamp(timeString) {
+				let date = new Date(timeString.replace(' ', 'T') + 'Z'); // 转为ISO格式
+				return date.getTime();
+			},
+			getActivePreviewList() {
+				getActivePreviewList().then(res => {
+					console.log(res)
+					this.previewList = res.dataList
+
+					// console.log(this.noticeList)
+				})
+			},
+			getCaseList() {
+				let params = {
+					pageSize: 8,
+					pageNum: 1
+				}
+				getCaseList(params).then(res => {
+					console.log(res)
+					this.caseList = res.dataList
+
+					// console.log(this.noticeList)
+				})
+			},
 			getmoreData() {
 				uni.showNavigationBarLoading();
 				if (this.current === 0) {
@@ -401,6 +364,7 @@
 <style lang="scss" scoped>
 	.content {
 		padding-bottom: 10rpx;
+
 		.home-top-banner {
 			width: 750rpx;
 			display: block;
@@ -435,8 +399,9 @@
 					display: flex;
 					align-items: center;
 					background-color: #FFF !important;
-					
+
 				}
+
 				/deep/.u-icon__icon {
 					display: none !important;
 				}
@@ -447,9 +412,11 @@
 		.company-detail {
 			width: 686rpx;
 			margin: 36rpx auto;
+
 			.company-detail-img {
 				width: 686rpx;
 			}
+
 			.company-tips {
 				padding: 24rpx 24rpx 0;
 				font-size: 18rpx;
@@ -457,6 +424,7 @@
 				font-family: "SimSun", "宋体", serif;
 			}
 		}
+
 		.case-title {
 			text-align: center;
 			margin: 0 auto 32rpx;
@@ -465,26 +433,35 @@
 			color: rgb(152, 4, 236);
 			font-family: "SimSun", "宋体", serif;
 		}
+
+		.case-box:nth-child(odd) {
+			flex-direction: row-reverse;
+		}
+
 		.case-box {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
 			width: 686rpx;
 			margin: 0 auto 18rpx;
+
 			.case-info {
 				width: 340rpx;
+
 				.case-info-title {
 					font-size: 20rpx;
 					font-weight: 600;
 					font-family: "SimSun", "宋体", serif;
 					margin-bottom: 24rpx;
 				}
+
 				.case-info-tips {
 					font-size: 16rpx;
 					line-height: 1.8;
 					font-family: "SimSun", "宋体", serif;
 				}
 			}
+
 			.case-img {
 				width: 330rpx;
 				border-radius: 32rpx;

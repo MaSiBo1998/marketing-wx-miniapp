@@ -3,7 +3,7 @@ import {
 } from '@/util/request.js'
 //获取演员列表
 export const getActorList = (data) => request({
-	url: '/mini/registration/activityList',
+	url: '/mini/actor/listByUser',
 	method: 'post',
 	data
 })

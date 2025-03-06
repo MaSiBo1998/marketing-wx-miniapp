@@ -25,7 +25,7 @@
 					活动时间:{{item.activityStartTime}}-{{item.activityEndTime}} <br>
 					报名截止: {{item.registrationDeadline}}
 				</view>
-				<view class="active-box-bottom-right" @click.stop="toSignUp">
+				<view class="active-box-bottom-right" @click.stop="toSignUp(item)">
 					立即报名
 				</view>
 			</view>
@@ -70,9 +70,10 @@
 					url:'/pages/active/detail/index'
 				})
 			},
-            toSignUp(){
+            toSignUp(data){
+				uni.setStorageSync('active_detail',data)
                 uni.navigateTo({
-                    url:'/pages/user/register/index'
+                    url:'/pages/user/register/index?type=sign'
                 })
             }
 		},

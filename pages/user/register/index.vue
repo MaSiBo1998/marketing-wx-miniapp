@@ -3,12 +3,12 @@
         <view class="card">
 
 
-            <u-input v-model="userInfo.age" border="none" placeholder="请输入姓名">
+            <u-input :disabled="!isEdit" v-model="userInfo.age" border="none" placeholder="请输入姓名">
                 <view class="input-info" slot="prefix">
                     姓名：
                 </view>
             </u-input>
-            <u-input v-model="userInfo.phoneNumber" border="none" placeholder="请输入手机号码" type="number">
+            <u-input :disabled="!isEdit" v-model="userInfo.phoneNumber" border="none" placeholder="请输入手机号码" type="number">
                 <view class="input-info" slot="prefix">
                     手机号码：
                 </view>
@@ -17,7 +17,10 @@
                 <view class="user-info-item-left" style="width: 120rpx;">
                     性别：
                 </view>
-                <view class="user-info-item-right">
+				<view class="user-info-item-right" v-if="!isEdit">
+				    {{userInfo.gender==1 ?'男':'女'}}
+				</view>
+                <view class="user-info-item-right" v-else>
                     <u-radio-group v-model="userInfo.gender" placement="row">
                         <u-radio style="margin-right: 15rpx;" activeColor="#3D8D7A" label="男" :name="1"></u-radio>
                         <u-radio activeColor="#3D8D7A" label="女" :name="0"></u-radio>
@@ -25,12 +28,12 @@
                 </view>
             </view>
             <!-- <button @click="toPage()">跳转</button> -->
-            <u-input v-model="userInfo.age" border="none" placeholder="请输入年龄">
+            <u-input :disabled="!isEdit" v-model="userInfo.age" border="none" placeholder="请输入年龄">
                 <view class="input-info" slot="prefix">
                     年龄：
                 </view>
             </u-input>
-            <u-input v-model="userInfo.height" border="none" placeholder="请输入身高">
+            <u-input :disabled="!isEdit" v-model="userInfo.height" border="none" placeholder="请输入身高">
                 <view class="input-info" slot="prefix">
                     身高：
                 </view>
@@ -38,7 +41,7 @@
                     cm
                 </view>
             </u-input>
-            <u-input v-model="userInfo.weight" border="none" placeholder="请输入体重">
+            <u-input :disabled="!isEdit" v-model="userInfo.weight" border="none" placeholder="请输入体重">
                 <view class="input-info" slot="prefix">
                     体重：
                 </view>
@@ -46,7 +49,7 @@
                     kg
                 </view>
             </u-input>
-            <u-input v-model="userInfo.workingYears" border="none" placeholder="请输入从业年限">
+            <u-input :disabled="!isEdit" v-model="userInfo.workingYears" border="none" placeholder="请输入从业年限">
                 <view class="input-info" slot="prefix">
                     从业年限：
                 </view>
@@ -67,17 +70,17 @@
                     </u-checkbox-group>
                 </view>
             </view>
-            <u-input v-model="userInfo.graduationSchool" border="none" placeholder="请输入毕业院校">
+            <u-input :disabled="!isEdit" v-model="userInfo.graduationSchool" border="none" placeholder="请输入毕业院校">
                 <view class="input-info" slot="prefix">
                     毕业院校：
                 </view>
             </u-input>
-            <u-input v-model="userInfo.pastExperiences" border="none" placeholder="请输入过往经历">
+            <u-input :disabled="!isEdit" v-model="userInfo.pastExperiences" border="none" placeholder="请输入过往经历">
                 <view class="input-info" slot="prefix">
                     过往经历：
                 </view>
             </u-input>
-            <u-input v-model="userInfo.performanceCases" border="none" placeholder="请输入演出案例">
+            <u-input :disabled="!isEdit" v-model="userInfo.performanceCases" border="none" placeholder="请输入演出案例">
                 <view class="input-info" slot="prefix">
                     演出案例：
                 </view>
@@ -87,7 +90,7 @@
                     代表图：
                 </view>
                 <view class="user-info-item-right" v-if="!isEdit">
-                    <u-album :urls="userInfo.coverImage.split(',')"></u-album>
+                    <!-- <u-album :urls="userInfo.coverImage.split(',')"></u-album> -->
                 </view>
                 <view class="user-info-item-right" v-else>
                     <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
@@ -107,9 +110,28 @@
                 </view>
             </view>
             <view class="bottom-card">
-                <view class="login-btn" @click="toSubmit()">
-                    {{ !isEdit?"编辑个人信息":'提交'}}
+                <view v-if="type == 'register'" class="login-btn" @click="toRegister()">
+                    立即注册
                 </view>
+				<view v-else>
+					<view v-if="isAlreadyRegister">
+						<view class="login-btn" style="background: #B3D8A8;" @click="toSignUp()">
+							立即报名
+						</view>
+						<view class="login-btn" style="background: #B3D8A8;" v-if="!isEdit">
+							{{ !isEdit?"编辑个人信息":'提交'}}
+						</view>
+						<view @click="isEdit = false" class="login-btn" style="background: #A3D1C6;" v-else>
+							取消编辑
+						</view>
+					</view>
+					<view v-else >
+						<view class="login-btn" style="background: #B3D8A8;" @click="toSignUp('sign')">
+							立即注册并报名
+						</view>
+					</view>
+					
+				</view>
             </view>
 
             <u-toast ref="uToast"></u-toast>
@@ -119,8 +141,12 @@
 
 <script>
     import {
-        getActorOne
+        getActorOne,
+		
     } from '@/api/actor.js'
+	import {
+		toSignUp
+	} from '@/api/active.js'
     export default {
         data() {
             return {
@@ -195,13 +221,25 @@
                         status: 0,
                         time: '2023-09-01'
                     }
-                ]
+                ],
+				type:'',//register注册,sign //报名
+				isAlreadyRegister:false
             }
         },
         onShow() {
             this.isEdit = false
         },
-        onLoad() {
+        onLoad(options) {
+			this.type = options.type
+			if(this.type == 'register'){
+				uni.setNavigationBarTitle({
+					title: '立即注册'
+				});
+			}else{
+				uni.setNavigationBarTitle({
+					title: '立即报名'
+				});
+			}
             this.getActorOne()
         },
         filters: {
@@ -214,17 +252,35 @@
                 let params = {
 
                 }
+				uni.showLoading({
+					title: '加载中'
+				});
                 getActorOne(params).then(res => {
                     console.log(res)
                     this.userInfo = res
+					this.isAlreadyRegister = res.name?true:false
                     console.log(this.userInfo)
+					
                 })
             },
-            toPage() {
-                uni.navigateTo({
-                    url: '/pages/login/authorize'
-                })
-            },
+			toRegister(){
+				
+			},
+			toSignUp(type){
+				let params = {
+					activityId: uni.getStorageSync('active_detail')
+				}
+				toSignUp(params).then(res =>{
+					if(type == 'sign'){
+						this.toRegister()
+					}else{
+						uni.navigateBack({
+							delta: 1
+						});
+					}
+					
+				})
+			},
             handleCheckboxChange(selectedValues) {
 
                 if (selectedValues.length > 3) {

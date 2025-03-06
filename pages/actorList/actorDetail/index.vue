@@ -6,29 +6,29 @@
 					<view class="actor-box-item">
 						<view class="actor-box-item-left">
 							<text class="title">姓名:</text>
-							<text class="info">张三</text>
+							<text class="info">{{actorDetail.name}}</text>
 						</view>
 						<view class="actor-box-item-right">
 							<text class="title">性别:</text>
-							<text class="info">男</text>
+							<text class="info">{{actorDetail.gender== 1?'男':女}}</text>
 						</view>
 						
 					</view>
 					<view class="actor-box-item">
 						<view class="actor-box-item-left">
 							<text class="title">年龄:</text>
-							<text class="info">18</text>
+							<text class="info">{{actorDetail.age}}</text>
 						</view>
 						<view class="actor-box-item-right">
 							<text class="title">身高:</text>
-							<text class="info">180</text>
+							<text class="info">{{actorDetail.height}}</text>
 						</view>
 						
 					</view>
 					<view class="actor-box-item">
 						<view class="actor-box-item-left">
 							<text class="title">体重:</text>
-							<text class="info">130</text>
+							<text class="info">{{actorDetail.weight}}</text>
 						</view>
 						<view class="actor-box-item-right">
 							<text class="title">特长:</text>
@@ -38,7 +38,7 @@
 					</view>
 				
 				</view>
-				<image class="actor-box-top-right" src="" mode="widthFix"></image>
+				<image class="actor-box-top-right" :src="actorDetail.homeImage" mode="widthFix"></image>
 				
 			</view>
 			<view class="actor-detail-title">
@@ -64,6 +64,9 @@
 		data() {
 			return {
 				searchVal: '',
+				actorDetail:{
+					
+				}
 			}
 		},
 		computed: {},
@@ -76,6 +79,7 @@
 
 		},
 		onLoad() {
+			this.actorDetail = uni.getStorageSync('actor_detail')
 			console.log(uni.getStorageSync('actor_detail'))
 		}
 	}

@@ -27,7 +27,8 @@
 				详情
 			</view>
 			<view class="detail-box-top-right">
-				需求人数:{{detail.requiredTotalNumber}}人 | 已录用: {{detail.requiredMaleNumber}}人 | 剩余{{detail.requiredFemaleNumber}}人
+				需求人数:{{detail.requiredTotalNumber}}人 | 已录用: {{detail.requiredMaleNumber}}人 |
+				剩余{{detail.requiredFemaleNumber}}人
 			</view>
 		</view>
 		<view class="detail-box-info">
@@ -38,7 +39,7 @@
 				<u-icon name="server-fill" size="24" color="rgb(153, 153, 153)"></u-icon>
 				客服
 			</view>
-			<view class="subtim-bottom-btn">
+			<view class="subtim-bottom-btn" @click="toSignUp()">
 				立即报名
 			</view>
 		</view>
@@ -55,12 +56,8 @@
 		onShow(option) {},
 		data() {
 			return {
-				detail:{},
+				detail: {},
 			}
-		},
-		computed: {},
-		methods: {
-
 		},
 		onUnload() {
 			uni.removeStorageSync('active_detail')
@@ -73,7 +70,15 @@
 				title: uni.getStorageSync('active_detail').name
 			});
 			this.detail = uni.getStorageSync('active_detail')
-		}
+		},
+		methods: {
+			toSignUp() {
+				uni.navigateTo({
+					url: '/pages/user/register/index?type=sign'
+				})
+			}
+		},
+
 	}
 </script>
 
