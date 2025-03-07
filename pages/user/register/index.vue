@@ -8,7 +8,8 @@
                     姓名：
                 </view>
             </u-input>
-            <u-input :disabled="!isEdit" v-model="userInfo.phoneNumber" border="none" placeholder="请输入手机号码" type="number">
+            <u-input :disabled="!isEdit" v-model="userInfo.phoneNumber" border="none" placeholder="请输入手机号码"
+                type="number">
                 <view class="input-info" slot="prefix">
                     手机号码：
                 </view>
@@ -17,9 +18,9 @@
                 <view class="user-info-item-left" style="width: 120rpx;">
                     性别：
                 </view>
-				<view class="user-info-item-right" v-if="!isEdit">
-				    {{userInfo.gender==1 ?'男':'女'}}
-				</view>
+                <view class="user-info-item-right" v-if="!isEdit">
+                    {{userInfo.gender==1 ?'男':'女'}}
+                </view>
                 <view class="user-info-item-right" v-else>
                     <u-radio-group v-model="userInfo.gender" placement="row">
                         <u-radio style="margin-right: 15rpx;" activeColor="#3D8D7A" label="男" :name="1"></u-radio>
@@ -57,19 +58,35 @@
                     年
                 </view>
             </u-input>
-            <view class="user-info-item">
-                <view class="user-info-item-left">
-                    特长：
+            <view class="user-info-item" @click="open(0)">
+                <view class="user-info-item-left" style="width: 150rpx;">
+                    特长1：
                 </view>
                 <view class="user-info-item-right">
-                    <u-checkbox-group :value="userInfo.checkboxList" @change="handleCheckboxChange">
-                        <u-checkbox :labelDisabled="false" activeColor="#3D8D7A"
-                            :customStyle="{marginRight: '8px',marginBottom:'8px'}"
-                            v-for="(item, index) in checkboxList1" :key="index" :label="item.label" :name="item.value">
-                        </u-checkbox>
-                    </u-checkbox-group>
+                    {{userInfo.primarySkillCategory}}
                 </view>
             </view>
+            <view class="user-info-item" @click="open(1)">
+                <view class="user-info-item-left" style="width: 150rpx;">
+                    特长2：
+                </view>
+                <view class="user-info-item-right">
+                    {{userInfo.secondarySkillCategory}}
+                </view>
+            </view>
+            <view class="user-info-item" @click="open(2)">
+                <view class="user-info-item-left" style="width: 150rpx;">
+                    特长3：
+                </view>
+                <view class="user-info-item-right">
+                    {{userInfo.thirdlySkillCategory}}
+                </view>
+            </view>
+            <u-input :disabled="!isEdit" v-model="userInfo.otherProfessionalCategory" border="none" placeholder="请输入特长">
+                <view class="input-info" slot="prefix">
+                    其他特长：
+                </view>
+            </u-input>
             <u-input :disabled="!isEdit" v-model="userInfo.graduationSchool" border="none" placeholder="请输入毕业院校">
                 <view class="input-info" slot="prefix">
                     毕业院校：
@@ -86,15 +103,15 @@
                 </view>
             </u-input>
             <view class="user-info-item">
-                <view class="user-info-item-left" style="width: 180rpx;">
+                <view class="user-info-item-left" style="width: 150rpx;">
                     代表图：
                 </view>
                 <view class="user-info-item-right" v-if="!isEdit">
-                    <!-- <u-album :urls="userInfo.coverImage.split(',')"></u-album> -->
+                    <u-album singleSize="45" multipleSize="45" :urls="userInfo.coverImage" :maxCount="9"></u-album>
                 </view>
                 <view class="user-info-item-right" v-else>
                     <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
-                        :maxCount="10"></u-upload>
+                        :maxCount="9"></u-upload>
                 </view>
             </view>
             <view class="user-info-item">
@@ -102,60 +119,62 @@
                     视频片段：
                 </view>
                 <view class="user-info-item-right" v-if="!isEdit">
-                    <u-album :urls="userInfo.videoClipUrl"></u-album>
+                    <u-album singleSize="50" multipleSize="50" :urls="[userInfo.videoClipUrl]"></u-album>
                 </view>
                 <view class="user-info-item-right" v-else>
-                    <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple
-                        :maxCount="10"></u-upload>
+                    <u-upload :fileList="fileList2" @afterRead="afterRead" @delete="deletePic" name="2" multiple
+                        :maxCount="1"></u-upload>
                 </view>
             </view>
             <view class="bottom-card">
                 <view v-if="type == 'register'" class="login-btn" @click="toRegister()">
                     立即注册
                 </view>
-				<view v-else>
-					<view v-if="isAlreadyRegister">
-						<view class="login-btn" style="background: #B3D8A8;" @click="toSignUp()">
-							立即报名
-						</view>
-						<view class="login-btn" style="background: #B3D8A8;" v-if="!isEdit">
-							{{ !isEdit?"编辑个人信息":'提交'}}
-						</view>
-						<view @click="isEdit = false" class="login-btn" style="background: #A3D1C6;" v-else>
-							取消编辑
-						</view>
-					</view>
-					<view v-else >
-						<view class="login-btn" style="background: #B3D8A8;" @click="toSignUp('sign')">
-							立即注册并报名
-						</view>
-					</view>
-					
-				</view>
+                <view v-else>
+                    <view v-if="isAlreadyRegister">
+                        <view class="login-btn" style="background: #B3D8A8;" @click="toSignUp()">
+                            立即报名
+                        </view>
+                        <view @click="toSubmit()" class="login-btn" style="background: #B3D8A8;">
+                            {{ !isEdit?"编辑个人信息":'提交'}}
+                        </view>
+                        <view @click="isEdit = false" class="login-btn" style="background: #A3D1C6;" v-if="isEdit">
+                            取消编辑
+                        </view>
+                    </view>
+                    <view v-else>
+                        <view class="login-btn" style="background: #B3D8A8;" @click="toSignUp('sign')">
+                            立即注册并报名
+                        </view>
+                    </view>
+
+                </view>
             </view>
 
             <u-toast ref="uToast"></u-toast>
+            <u-picker confirmColor="#3D8D7A" ref="multiPicker" :show="showPicker" :columns="columns"
+                @change="handleColumnChange" @confirm="confirm" @cancel="showPicker = false" keyName="label" />
         </view>
     </view>
 </template>
 
 <script>
+    import {baseURL} from '@/util/request.js'
     import {
         getActorOne,
-		
+        editActor
     } from '@/api/actor.js'
-	import {
-		toSignUp
-	} from '@/api/active.js'
+    import {
+        toSignUp
+    } from '@/api/active.js'
     export default {
         data() {
             return {
                 isEdit: false,
                 activeNames: '',
                 showDetail: false,
-                currentTab: 0,
-                avatarUrl: '',
                 fileList1: [],
+                fileList2: [],
                 userInfo: {
                     name: '张三',
                     gender: '男',
@@ -169,184 +188,264 @@
                     checkboxList: [],
                     video: []
                 },
-                checkboxList1: [{
-                        label: '舞蹈1',
-                        value: 'dance'
-                    },
-                    {
-                        label: '声乐2',
-                        value: 'music'
-                    },
-                    {
-                        label: '表演3',
-                        value: 'acting'
-                    },
-                    {
-                        label: '乐器4',
-                        value: '1'
-                    },
-                    {
-                        label: '乐器5',
-                        value: 'inst2rument'
-                    },
-                    {
-                        label: '乐器6',
-                        value: 'instr3ument'
-                    },
-                    {
-                        label: '乐器7',
-                        value: '5'
-                    }
+                showPicker: false,
+                skillIndex: 0,
+                columns: [
+                    ["歌手类", "乐队类", "舞蹈", "非遗", "器乐", "戏曲", "特技/绝技绝活", "杂技", "魔术", "武术", "戏剧表演", "舞美设计", "灯光师",
+                        "音响师", "服装设计", "服装管理", "多媒体", "场务"
+                    ],
+                    ["音乐剧", "通俗", "美声", "民歌", "民族", "流行", "说唱"]
+                ], // 动态列数据
+                columnData: [
+                    ["歌手类", "乐队类", "舞蹈", "非遗", "器乐", "戏曲", "特技/绝技绝活", "杂技", "魔术", "武术", "戏剧表演"],
+
+                    ["民乐", "流行音乐"],
+                    ["民族舞", "古典舞", "芭蕾舞", "爵士舞", "现代舞", "流行热舞"],
+                    ["国家级", "省级", "其他"],
+
+                    ["西洋乐器", "中国民乐"],
+                    [], // 戏曲无子类
+                    [], // 特技无子类
+                    ["高空", "传统"],
+                    ["大型魔术", "近景魔术", "互动魔术"],
+                    ["武术套路", "拳", "太极", "剑", "刀", "棍", "枪"],
+                    [], // 戏剧表演无子类
+                    [],
+                    ['灯光设计', '灯光技师'],
+                    ['音响设计', '音响技师'],
+                    [],
+                    [],
+                    [],
+                    [],
                 ],
-                tabList: [{
-                        name: '我的报名',
-                        count: 2
-                    },
-                    {
-                        name: '已参与',
-                        count: 5
-                    },
-                    {
-                        name: '未参与',
-                        count: 5
-                    }
-                ],
-                currentList: [{
-                        title: '音乐会演出',
-                        status: 1,
-                        time: '2023-08-15'
-                    },
-                    {
-                        title: '话剧表演',
-                        status: 0,
-                        time: '2023-09-01'
-                    }
-                ],
-				type:'',//register注册,sign //报名
-				isAlreadyRegister:false
+                type: '', //register注册,sign //报名
+                isAlreadyRegister: false
             }
         },
         onShow() {
             this.isEdit = false
         },
         onLoad(options) {
-			this.type = options.type
-			if(this.type == 'register'){
-				uni.setNavigationBarTitle({
-					title: '立即注册'
-				});
-			}else{
-				uni.setNavigationBarTitle({
-					title: '立即报名'
-				});
-			}
+            this.type = options.type
+            if (this.type == 'register') {
+                uni.setNavigationBarTitle({
+                    title: '立即注册'
+                });
+            } else {
+                uni.setNavigationBarTitle({
+                    title: '立即报名'
+                });
+            }
             this.getActorOne()
         },
-        filters: {
-            statusFilter(status) {
-                return status ? '已参与' : '未参与'
-            }
-        },
         methods: {
-            getActorOne() {
-                let params = {
+            open(index) {
+                if (!this.isEdit) {
+                    return false
+                }
+                this.skillIndex = index
+                this.showPicker = true
+            },
+            confirm(e) {
+                let str = ''
+                if (e.value.length == 2 && e.value[1]) {
+                    str = e.value[0] + '-' + e.value[1]
+                } else {
+                    str = e.value[0]
+                }
+                console.log(str)
+                switch (this.skillIndex) {
+                    case 0:
+                        this.userInfo.primarySkillCategory = str
+                        break;
+                    case 1:
+                        this.userInfo.secondarySkillCategory = str
+                        break;
+                    case 2:
+                        this.userInfo.thirdlySkillCategory = str
+                        break;
 
                 }
-				uni.showLoading({
-					title: '加载中'
-				});
-                getActorOne(params).then(res => {
+                this.showPicker = false
+            },
+            handleColumnChange(e) {
+                const {
+                    columnIndex,
+                    value,
+                    values, // values为当前变化列的数组内容
+                    index,
+                    // 微信小程序无法将picker实例传出来，只能通过ref操作
+                    picker = this.$refs.multiPicker
+                } = e
+                // 当第一列值发生变化时，变化第二列(后一列)对应的选项
+                if (columnIndex === 0) {
+                    // picker为选择器this实例，变化第二列对应的选项
+                    picker.setColumnValues(1, this.columnData[index])
+                }
+            },
+            getActorOne() {
+                uni.showLoading({
+                    title: '加载中'
+                });
+                getActorOne().then(res => {
                     console.log(res)
                     this.userInfo = res
-					this.isAlreadyRegister = res.name?true:false
+                    this.userInfo.coverImage = res.coverImage.split(',')
+                    this.isAlreadyRegister = res.name ? true : false
+                    if(res.coverImage != ''){
+                        this.userInfo.coverImage.forEach(item =>{
+                            this.fileList1.push({
+                                url:item
+                            })
+                        })
+                    }
+                    if(res.videoClipUrl != ''){
+                        this.fileList2 = [{
+                            url:res.videoClipUrl
+                        }]
+                    }
+                    uni.setStorageSync('userInfo', res)
                     console.log(this.userInfo)
-					
                 })
             },
-			toRegister(){
-				
-			},
-			toSignUp(type){
-				let params = {
-					activityId: uni.getStorageSync('active_detail')
-				}
-				toSignUp(params).then(res =>{
-					if(type == 'sign'){
-						this.toRegister()
-					}else{
-						uni.navigateBack({
-							delta: 1
-						});
-					}
-					
-				})
-			},
-            handleCheckboxChange(selectedValues) {
-
-                if (selectedValues.length > 3) {
-                    // let arr = selectedValues.slice(0, 3)
-                    // this.$set(this.userInfo,'checkboxList', selectedValues.slice(0, 3))
-                    this.userInfo.checkboxList.splice(3)
-                    uni.showToast({
-                        title: '最多选择三个',
-                        icon: 'none',
-                        duration: 1500
-                    });
-                    return
-
-                } else {
-                    // 正常更新数据
-                    this.userInfo.checkboxList = selectedValues;
-                }
+            toRegister() {
 
             },
+            toSignUp(type) {
+                let params = {
+                    activityId: uni.getStorageSync('active_detail').id
+                }
+                toSignUp(params).then(res => {
+                    if(res.code == 0){
+                        if (type == 'sign') {
+                            this.toRegister()
+                        } else {
+                            uni.navigateBack({
+                                delta: 1
+                            });
+                        }
+                    }else{
+                        uni.showToast({
+                        	title: res.msg,
+                        	icon: 'none',
+                        	duration: 1200
+                        })
+                    }
+                    
+
+                })
+            },
             toSubmit() {
-                // this.activeNames = this.activeNames.includes('first') ? [] : ['first'],
-                this.$nextTick(() => {
-                    this.activeNames = 'first'
-                    setTimeout(() => this.$refs.collapseRef.init(), 200);
-                });
                 // this.tagName[0] = 1
                 console.log(this.activeNames)
                 if (!this.isEdit) {
                     this.isEdit = !this.isEdit
                 } else {
-
+                    let params = {
+                        ...this.userInfo
+                    }
+                    let arr = []
+                    this.fileList1.forEach(item =>{
+                        arr.push(item.url)
+                    })
+                    params.videoClipUrl = this.fileList2[0].url
+                    params.coverImage = arr.join(',')
+                    uni.showLoading({
+                        title: '加载中'
+                    });
+                    editActor(params).then(res => {
+                        this.getActorOne()
+                        this.isEdit = false
+                    })
                 }
             },
-            // 上传头像
-            uploadAvatar() {
-                uni.chooseImage({
-                    count: 1,
-                    success: (res) => {
-                        this.avatarUrl = res.tempFilePaths[0]
+            // 删除图片
+            deletePic(event) {
+                this[`fileList${event.name}`].splice(event.index, 1)
+            },
+            // 新增图片
+            async afterRead(event) {
+                // 当设置 multiple 为 true 时, file 为数组格式，否则为对象格式
+                let lists = [].concat(event.file);
+                let fileListLen = this[`fileList${event.name}`].length;
+                lists.map((item) => {
+                    this[`fileList${event.name}`].push({
+                        ...item,
+                        status: "uploading",
+                        message: "上传中",
+                    });
+                });
+                for (let i = 0; i < lists.length; i++) {
+                    let result = ''
+                    if(event.name == 1){
+                         result = await this.uploadFilePromise(lists[i].url);
+                    }else{
+                          result = await this.uploadFileVideoPromise(lists[i].url);
                     }
-                })
+                    let item = this[`fileList${event.name}`][fileListLen];
+                    this[`fileList${event.name}`].splice(
+                        fileListLen,
+                        1,
+                        Object.assign(item, {
+                            status: "success",
+                            message: "",
+                            url: result,
+                        })
+                    );
+                    fileListLen++;
+                }
             },
-            // 绑定操作
-            handleBind() {
-                uni.showActionSheet({
-                    itemList: ['微信绑定', '手机绑定'],
-                    success: (res) => {
-                        console.log('绑定方式:', res.tapIndex)
-                    }
-                })
+            uploadFilePromise(url) {
+                return new Promise((resolve, reject) => {
+                    let a = uni.uploadFile({
+                        url: baseURL+"/upload/uploadImages",
+                        filePath: url,
+                        name: "file",
+                        header:{
+                            token:uni.getStorageSync('token')
+                        },
+                        success: (res) => {
+                            let ret = JSON.parse(res.data)
+                            if(ret.code != 0 ){
+                                uni.showToast({
+                                	title: '上传失败',
+                                	icon: 'none',
+                                	duration: 1200
+                                })
+                            }else{
+                                resolve(ret.data.httpPath)
+                            }
+                            
+                        },
+                    });
+                });
             },
-            // 图片上传处理
-            handleImageUpload(event) {
-                // 这里处理上传逻辑
-                this.userInfo.images = event.file
+            uploadFileVideoPromise(url) {
+                return new Promise((resolve, reject) => {
+                    let a = uni.uploadFile({
+                        url: baseURL+"/upload/uploadVideo",
+                        filePath: url,
+                        name: "file",
+                        header:{
+                            token:uni.getStorageSync('token')
+                        },
+                        success: (res) => {
+                            let ret = JSON.parse(res.data)
+                            if(ret.code != 0 ){
+                                uni.showToast({
+                                	title: '上传失败',
+                                	icon: 'none',
+                                	duration: 1200
+                                })
+                            }else{
+                                resolve(ret.data.httpPath)
+                            }
+                            
+                        },
+                    });
+                });
             },
-            // 视频上传处理
-            handleVideoUpload(event) {
-                // 这里处理上传逻辑
-                this.userInfo.video = event.file
-            },
-            // 切换tab
-            changeTab(data) {
-                this.currentTab = data.count
-                // 这里根据tab切换列表数据
-            }
+
         }
     }
 </script>
@@ -356,7 +455,7 @@
         background: rgba(246, 247, 250, 1);
         // min-height: 100vh;
         padding-top: 26rpx;
-        padding-bottom: 250rpx;
+        padding-bottom: 400rpx;
         box-sizing: border-box;
 
         .card {
@@ -373,6 +472,7 @@
     .bottom-card {
         position: fixed;
         bottom: 0;
+        z-index: 999;
         left: 0;
         background-color: rgb(255, 255, 255);
         width: 750rpx;

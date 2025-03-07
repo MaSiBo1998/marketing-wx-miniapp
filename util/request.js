@@ -8,7 +8,7 @@ export const request = (options) => {
 			data: options.data || {}, //传递参数：传入的参数或者默认传递空集合
 			header: {
 				'content-type': 'application/json;',
-				'token': '86aee16367f349f28c8cc11a7f37a744',// options.token
+				'token': uni.getStorageSync('token'),// options.token
 			},
 			success: (res) => {
 				uni.hideLoading();
@@ -32,7 +32,7 @@ export const request = (options) => {
 						return false
 						
 					}
-					reject(res.data.msg)
+					resolve(res.data)
 				}
 			},
 			// 这里的接口请求，如果出现问题就输出接口请求失败
