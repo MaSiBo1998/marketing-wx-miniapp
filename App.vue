@@ -2,7 +2,7 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
-            uni.setStorageSync('token','76714670b04f4fcb9beffb8305aa4b9e')
+            // uni.setStorageSync('token','76714670b04f4fcb9beffb8305aa4b9e')
 		},
 		onShow: function() {
 			console.log('App Show')

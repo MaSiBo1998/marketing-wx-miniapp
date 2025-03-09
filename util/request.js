@@ -32,7 +32,17 @@ export const request = (options) => {
 						return false
 						
 					}
-					resolve(res.data)
+					if(res.data.code == 0){
+						resolve(res.data)
+					}else{
+						uni.showToast({
+							title: res.msg,
+							icon: 'none',
+							duration: 1200
+						})
+						reject(res.data)
+					}
+					
 				}
 			},
 			// 这里的接口请求，如果出现问题就输出接口请求失败

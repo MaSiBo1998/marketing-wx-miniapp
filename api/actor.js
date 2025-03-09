@@ -25,6 +25,12 @@ export const getActorOne = (data) => request({
 	method: 'post',
 	data
 })
+//获取自己报名活动
+export const getUserActivityList = (data) => request({
+	url: '/mini/registration/activityList',
+	method: 'post',
+	data
+})
 
 //获取演员详情
 export const getActorOneDetail = (data) => request({

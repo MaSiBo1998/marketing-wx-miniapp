@@ -12,7 +12,9 @@
 				"path": "pages/user/index",
 				"style": {
 					"navigationBarTitleText": "我的",
-                    "navigationStyle": "custom"
+                    "navigationStyle": "custom",
+					"enablePullDownRefresh": true,
+					"onReachBottonDistance":150
 				}
 			},
             {

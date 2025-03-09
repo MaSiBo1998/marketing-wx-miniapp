@@ -1,9 +1,9 @@
 <template>
 	<view class="content">
 		<image class="avatar-img" src="@/static/login/avatar.png" mode=""></image>
-		<view class="login-btn" @click="toLogin()">
+		<button class="login-btn" @click="toLogin()" open-type="chooseAvatar">
 			一键授权登录
-		</view>
+		</button>
 		<!-- <view class="change-mobile" @click="toMobileLogin()">
 			切换手机号登录
 		</view> -->
@@ -22,6 +22,9 @@
 </template>
 
 <script>
+	import {
+		wxLoginCode
+	} from '@/api/login'
 	export default {
 		data() {
 			return {
@@ -29,14 +32,16 @@
 			}
 		},
 		methods: {
-			toLogin(){
-				if(!this.isAgree){
+
+			toLogin() {
+				if (!this.isAgree) {
 					uni.showToast({
 						title: '请先阅读并同意协议',
 						icon: 'none'
 					})
 					return
 				}
+				let _this = this
 				uni.getUserProfile({ //获取到用户信息
 					desc: '登录后可同步数据',
 					success: async (obj) => {
@@ -47,41 +52,34 @@
 							provider: 'weixin',
 							success: (res) => {
 								let params = {
-									wxCode: res.code,
+									code: res.code,
 									wxAvatarUrl: avatarUrl,
 									wxNickName: nickName,
 								}
+								uni.showLoading({
+									title: '登录中...'
+								});
 								//获取到登录凭证
-								// wxLoginGetOpenid(params).then(res => {
-								// 	if (res.code === 600) {
-								// 		that.$store.commit("userInfo/setUserToken", res
-								// 			.msg)
-								// 		uni.setStorageSync('token', res.msg);
-								// 		that.dialogToggle()
-								// 		uni.showToast({
-								// 			title: res.data,
-								// 			icon: 'none'
-								// 		})
-								// 	} else {
-								// 		that.$store.commit("userInfo/setUserToken", res)
-								// 		uni.setStorageSync('token', res);
-								// 		uni.showToast({
-								// 			title: '登录成功',
-								// 			icon: 'none'
-								// 		})
-								// 		that.dialogClose()
-								// 		setTimeout(() => {
-								// 			this.goUser()
-								// 		}, 600)
-								// 	}
-
-								// }).catch(err => {
-								// 	console.log(err, 234324)
-								// })
+								wxLoginCode(params).then(res => {
+									console.log(res)
+									uni.showToast({
+										title: '登录成功',
+										icon: 'none',
+										duration: 1200
+									});
+									uni.setStorageSync('token', res.token)
+									_this.getActorOne()
+								}).catch(err => {
+									console.log(err, 234324)
+									uni.showToast({
+										title: '登录失败,请重新登录',
+										icon: 'none',
+										duration: 1200
+									});
+								})
 							},
-				
+
 						});
-				
 					},
 					fail: () => {
 						uni.showToast({
@@ -100,7 +98,7 @@
 			// 手机号登录
 			toMobileLogin() {
 				uni.navigateTo({
-					url:'/pages/login/mobile'
+					url: '/pages/login/mobile'
 				})
 			},
 			// 协议跳转

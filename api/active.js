@@ -13,6 +13,12 @@ export const getActiveOne = (data) => request({
 	method: 'post',
 	data
 })
+//获取招募地址
+export const getActiveLocation = (data) => request({
+	url: '/mini/activity/getActivityLocationList',
+	method: 'post',
+	data
+})
 //立即报名
 export const toSignUp = (data) => request({
 	url: '/mini/registration/add',
