@@ -256,16 +256,13 @@
 				currentTabIndex:0,
 				fileList: [],
 				allList: [],
+                isLogin:false
 			}
 		},
+        onShow(){
+this.isLogin = uni.getStorageSync('token')?true:false
+        },
 		computed: {
-			isLogin() {
-				if (uni.getStorageSync('token')) {
-					return true
-				} else {
-					return false
-				}
-			},
 			 currentList() {
 			    if (this.currentTabIndex === 0) {  // "我的报名"：待处理状态
 			      return this.allList.filter(item => item.registrationStatus === 0);
@@ -285,6 +282,7 @@
 		    uni.stopPullDownRefresh();
 		},
 		onLoad() {
+            this.isLogin = uni.getStorageSync('token')?true:false
 			if (uni.getStorageSync('token')) {
 				this.isEdit = false
 				this.getActorOne()
@@ -376,6 +374,7 @@
 										duration: 1200
 									});
 									uni.setStorageSync('token', res.token)
+                                    _this.isLogin = true
 									_this.getActorOne()
 								}).catch(err => {
 									console.log(err, 234324)

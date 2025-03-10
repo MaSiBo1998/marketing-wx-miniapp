@@ -318,9 +318,9 @@
 				console.log(uni.getStorageSync('active_detail'))
 				toSignUp(params).then(res => {
 					console.log(res)
-					uni.navigateBack({
-						delta: 1
-					});
+					uni.switchTab({
+                        url:'/pages/active/index'
+					})
 				}).catch(err => {
 					uni.showToast({
 						title: err.msg,

@@ -40,7 +40,7 @@
 				客服
 			</view>
 			<view class="subtim-bottom-btn" @click="toSignUp()">
-				立即报名
+				{{statusFilter(detail.registrationStatus)}}
 			</view>
 		</view>
 	</view>
@@ -72,10 +72,40 @@
 			this.detail = uni.getStorageSync('active_detail')
 		},
 		methods: {
+            statusFilter(status) {
+                switch (status) {
+                    case '0':
+                        console.log('已报名')
+                        return '已报名'
+                        break;
+                    case '1':
+                        return '报名通过'
+                        break;
+                    case '2':
+                        return '报名拒绝'
+                        break;
+                    case '3':
+                        return '已作废'
+                        break;
+                    default:
+                        return '立即报名'
+                        break;
+                }
+            },
 			toSignUp() {
-				uni.navigateTo({
-					url: '/pages/user/register/index?type=sign'
-				})
+                let _this = this
+                if(_this.detail.registrationStatus !== null){
+                    uni.showToast({
+                        title: _this.statusFilter(_this.detail.registrationStatus),
+                        icon: 'none',
+                        duration: 1200
+                    })
+                }else{
+                   uni.navigateTo({
+                   	url: '/pages/user/register/index?type=sign'
+                   }) 
+                }
+				
 			}
 		},
 
