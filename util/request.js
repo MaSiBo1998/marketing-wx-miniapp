@@ -34,9 +34,18 @@ export const request = (options) => {
 					}
 					if(res.data.code == 0){
 						resolve(res.data)
+					}else if (res.data.code == 301){
+						uni.showToast({
+							title: '登录已过期,请重新登录',
+							icon: 'none',
+							duration: 1200
+						})
+						uni.navigateTo({
+							url:'/pages/login/authorize'
+						})
 					}else{
 						uni.showToast({
-							title: res.msg,
+							title: res.data.msg,
 							icon: 'none',
 							duration: 1200
 						})

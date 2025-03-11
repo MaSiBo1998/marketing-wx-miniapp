@@ -1,7 +1,18 @@
 <template>
 	<view class="container">
 		<view class="card">
-
+<view class="user-info-item">
+				<view class="user-info-item-left" style="width: 150rpx;">
+					头像：
+				</view>
+				<view class="user-info-item-right" v-if="!isEdit">
+					<u-album singleSize="45" multipleSize="45" :urls="[userInfo.homeImage]" :maxCount="9"></u-album>
+				</view>
+				<view class="user-info-item-right" v-else>
+					<u-upload :fileList="fileList3" @afterRead="afterRead" @delete="deletePic" name="3" multiple
+						:maxCount="1"></u-upload>
+				</view>
+			</view>
 
 			<u-input :disabled="!isEdit" v-model="userInfo.name" border="none" placeholder="请输入姓名">
 				<view class="input-info" slot="prefix">
@@ -115,14 +126,14 @@
 				</view>
 			</view>
 			<view class="user-info-item">
-				<view class="user-info-item-left" style="width: 180rpx;">
+				<view class="user-info-item-left" style="width: 200rpx;">
 					视频片段：
 				</view>
 				<view class="user-info-item-right" v-if="!isEdit">
 					<u-album singleSize="50" multipleSize="50" :urls="[userInfo.videoClipUrl]"></u-album>
 				</view>
 				<view class="user-info-item-right" v-else>
-					<u-upload :fileList="fileList2" @afterRead="afterRead" @delete="deletePic" name="2" multiple
+					<u-upload accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic" name="2" multiple
 						:maxCount="1"></u-upload>
 				</view>
 			</view>
@@ -177,6 +188,7 @@
 				showDetail: false,
 				fileList1: [],
 				fileList2: [],
+				fileList3: [],
 				userInfo: {
 					name: '张三',
 					gender: '男',
@@ -225,10 +237,10 @@
 			}
 		},
 		onShow() {
-			this.isEdit = false
+			
 		},
 		onLoad(options) {
-
+			this.isEdit = false
 			this.getActorOne()
 		},
 		methods: {
@@ -297,8 +309,12 @@
 							url: res.videoClipUrl
 						}]
 					}
-					this.type = res.name
-					if (this.type == 'register') {
+					if (res.homeImage != '') {
+						this.fileList3 = [{
+							url: res.homeImage
+						}]
+					}
+					if (this.isAlreadyRegister == 'register') {
 						uni.setNavigationBarTitle({
 							title: '立即注册'
 						});
@@ -341,8 +357,9 @@
 					this.fileList1.forEach(item => {
 						arr.push(item.url)
 					})
-					params.videoClipUrl = this.fileList2[0].url
-					params.coverImage = arr.join(',')
+					params.videoClipUrl = this.fileList2.length > 0 ? this.fileList2[0].url : ''
+					params.homeImage = this.fileList3.length > 0 ? this.fileList3[0].url : ''
+					params.coverImage = arr.length > 0 ? arr.join(',') : ''
 					uni.showLoading({
 						title: '加载中'
 					});
@@ -372,20 +389,26 @@
 					let result = ''
 					if (event.name == 1) {
 						result = await this.uploadFilePromise(lists[i].url);
+					} else if (event.name == 3) {
+						result = await this.uploadFilePromise(lists[i].url);
 					} else {
 						result = await this.uploadFileVideoPromise(lists[i].url);
 					}
+					console.log(result)
 					let item = this[`fileList${event.name}`][fileListLen];
 					this[`fileList${event.name}`].splice(
 						fileListLen,
 						1,
 						Object.assign(item, {
-							status: "success",
+							status: result?"success":'error',
 							message: "",
-							url: result,
+							url: result?result:'',
 						})
 					);
 					fileListLen++;
+					if(!result){
+						this[`fileList${event.name}`].splice(event.index, 1)
+					}
 				}
 			},
 			uploadFilePromise(url) {
@@ -405,6 +428,7 @@
 									icon: 'none',
 									duration: 1200
 								})
+								resolve(false)
 							} else {
 								resolve(ret.data.httpPath)
 							}
@@ -430,6 +454,7 @@
 									icon: 'none',
 									duration: 1200
 								})
+								resolve(false)
 							} else {
 								resolve(ret.data.httpPath)
 							}

@@ -8,16 +8,13 @@
 			<view class="active-box-info">
 				{{detail.subject}}
 			</view>
-			<view class="active-box-bottom">
-				<view class="active-box-bottom-left">
-					活动时间:{{detail.activityStartTime}}-{{detail.activityEndTime}}<br>
-					报名截止: {{detail.registrationDeadline}}
-				</view>
-			</view>
 		</view>
 		<view class="time-line">
 			<view class="time-line-left">
-				时效 <text>长期有效</text>
+				时效 <view class="date">
+					活动时间:{{detail.activityStartTime}}-{{detail.activityEndTime}}<br>
+					报名截止: {{detail.registrationDeadline}}
+				</view>
 			</view>
 			<u-icon name="share-square" size="28"></u-icon>
 
@@ -31,8 +28,7 @@
 				剩余{{detail.requiredFemaleNumber}}人
 			</view>
 		</view>
-		<view class="detail-box-info">
-			{{detail.detailDesc}}
+		<view class="detail-box-info" v-html="detail.detailDesc">
 		</view>
 		<view class="subtim-bottom">
 			<view class="subtim-bottom-left">
@@ -48,14 +44,13 @@
 
 <script>
 	import {
-		getMyInfoData,
-		getAddressBylat,
-		loginOut
-	} from '@/util/api.js'
+		getActiveOne
+	} from '@/api/active.js'
 	export default {
 		onShow(option) {},
 		data() {
 			return {
+				activityId: '',
 				detail: {},
 			}
 		},
@@ -66,46 +61,65 @@
 		},
 		onLoad() {
 			console.log(uni.getStorageSync('active_detail'))
-			uni.setNavigationBarTitle({
-				title: uni.getStorageSync('active_detail').name
-			});
-			this.detail = uni.getStorageSync('active_detail')
+			this.activityId = uni.getStorageSync('active_detail_id')
+			if (this.activityId) {
+				this.getActiveOne()
+			} else {
+				uni.switchTab({
+					url: '/pages/active/index'
+				})
+			}
 		},
 		methods: {
-            statusFilter(status) {
-                switch (status) {
-                    case '0':
-                        console.log('已报名')
-                        return '已报名'
-                        break;
-                    case '1':
-                        return '报名通过'
-                        break;
-                    case '2':
-                        return '报名拒绝'
-                        break;
-                    case '3':
-                        return '已作废'
-                        break;
-                    default:
-                        return '立即报名'
-                        break;
-                }
-            },
+			getActiveOne() {
+				let params = {
+					id: this.activityId
+				}
+				uni.showLoading({
+					title: '加载中...'
+				});
+				getActiveOne(params).then(res => {
+					this.detail = res
+				}).catch(err => {
+					uni.switchTab({
+						url: '/pages/active/index'
+					})
+				})
+			},
+			statusFilter(status) {
+				switch (status) {
+					case '0':
+						console.log('已报名')
+						return '已报名'
+						break;
+					case '1':
+						return '报名通过'
+						break;
+					case '2':
+						return '报名拒绝'
+						break;
+					case '3':
+						return '已作废'
+						break;
+					default:
+						return '立即报名'
+						break;
+				}
+			},
 			toSignUp() {
-                let _this = this
-                if(_this.detail.registrationStatus !== null){
-                    uni.showToast({
-                        title: _this.statusFilter(_this.detail.registrationStatus),
-                        icon: 'none',
-                        duration: 1200
-                    })
-                }else{
-                   uni.navigateTo({
-                   	url: '/pages/user/register/index?type=sign'
-                   }) 
-                }
-				
+				let _this = this
+				if (_this.detail.registrationStatus !== null) {
+					uni.showToast({
+						title: _this.statusFilter(_this.detail.registrationStatus),
+						icon: 'none',
+						duration: 1200
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/user/register/index?type=sign'
+					})
+				}
+
 			}
 		},
 
@@ -116,6 +130,8 @@
 	.content {
 		background-color: #EEE;
 		min-height: 100vh;
+		padding-bottom: 230rpx;
+		box-sizing: border-box;
 
 		.active-detail-top {
 			background-color: #FFF;
@@ -125,32 +141,20 @@
 			.active-img {
 				width: 686rpx;
 				display: block;
+				border-radius: 16rpx;
 			}
 
 			.active-box-title {
-				font-size: 36rpx;
+				font-size: 38rpx;
 				font-weight: 600;
 				margin: 16rpx 0 6rpx;
 				text-align: left;
 			}
 
 			.active-box-info {
-				font-size: 22rpx;
+				font-size: 28rpx;
 				text-align: left;
 				font-weight: 500;
-			}
-
-			.active-box-bottom {
-				margin: 16rpx auto;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-
-				.active-box-bottom-left {
-					font-size: 22rpx;
-					text-align: left;
-					font-weight: 500;
-				}
 			}
 		}
 
@@ -164,11 +168,19 @@
 			justify-content: space-between;
 
 			.time-line-left {
-				color: rgb(153, 153, 153);
 
-				text {
-					padding-left: 15rpx;
-					color: black;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				font-size: 32rpx;
+				font-weight: 600;
+
+				.date {
+					color: rgb(153, 153, 153);
+					margin-left: 16rpx;
+					font-size: 22rpx;
+					text-align: left;
+					font-weight: 500;
 				}
 			}
 		}
@@ -228,7 +240,7 @@
 
 			.subtim-bottom-btn {
 				width: 630rpx;
-				background-color: rgb(182, 152, 128);
+				background-color: #3D8D7A;
 				height: 96rpx;
 				border-radius: 48rpx;
 				text-align: center;

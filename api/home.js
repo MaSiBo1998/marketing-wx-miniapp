@@ -13,3 +13,9 @@ export const getCaseList = (data) => request({
 	method: 'post',
 	data
 })
+//获取banner
+export const getBannerList = (data) => request({
+	url: '/mini/classical/list',
+	method: 'post',
+	data
+})

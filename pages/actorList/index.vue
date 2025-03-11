@@ -106,8 +106,6 @@
 		padding-top: 20rpx;
 		min-height: 100vh;
 		box-sizing: border-box;
-		background: linear-gradient(7.73deg, rgba(255, 255, 255, 0) 7.45%, rgba(255, 106, 12, 1) 61.97%, rgba(255, 106, 12, 1) 95.12%) no-repeat;
-		background-size: 750rpx 582rpx;
 		background-color: #EEE;
 
 		.actor-item {
@@ -116,7 +114,7 @@
 			margin: 0 auto 32rpx;
 			background-color: #FFF;
 			padding: 16rpx;
-			border-radius: 16rpx;
+			border-radius: 8rpx;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;

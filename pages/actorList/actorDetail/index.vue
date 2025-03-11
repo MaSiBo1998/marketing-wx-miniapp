@@ -105,9 +105,6 @@
 <style lang="scss" scoped>
 	.content {
 		width: 750rpx;
-		height: 582rpx;
-		background: linear-gradient(7.73deg, rgba(255, 255, 255, 0) 7.45%, rgba(255, 106, 12, 1) 61.97%, rgba(255, 106, 12, 1) 95.12%) no-repeat;
-		background-size: 750rpx 582rpx;
 		background-color: #EEE;
 		min-height: 100vh;
 		padding-top: 20rpx;

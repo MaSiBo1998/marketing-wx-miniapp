@@ -1,22 +1,20 @@
 <template>
 	<view class="content">
 		<u-loading-page bg-color="#e8e8e8" :loading="loading" loading-text="加载中..."></u-loading-page>
-		<image class="home-top-banner" src="http://edmfile.yiwaixiao.net/weixin/images/11_20250309205717084.png"
-			mode="widthFix"></image>
+		<!-- 轮播图 -->
+		<u-swiper imgMode="widthFix" keyName="bannerImage" @tap="bannerClick($event,type)" radius="24rpx"
+			interval="3000" duration="300" :list="bannerList"></u-swiper>
 		<view class="notice-box" v-if="noticeString">
 			<view class="notice-box-in">
 				<view class="notic-box-left">
 					正在演出
 				</view>
-				<u-notice-bar color="black" icon="" :text="noticeString"></u-notice-bar>
+				<u-notice-bar fontSize="18" color="black" icon="" :text="noticeString"></u-notice-bar>
 			</view>
 		</view>
 		<view class="company-detail">
-			<!-- <u-image class="company-detail-img"
-				src="http://edmfile.yiwaixiao.net/weixin/images/11_20250309210005714.png" mode="widthFix">
-				<view slot="error" style="font-size: 24rpx;">加载失败</view>
-			</u-image> -->
-			<image class="company-detail-img"  src="http://edmfile.yiwaixiao.net/weixin/images/11_20250309210005714.png" mode="widthFix"></image>
+			<image class="company-detail-img" src="http://edmfile.yiwaixiao.net/weixin/images/11_20250309210005714.png"
+				mode="widthFix"></image>
 			<view class="company-tips">
 				华侨城文化演艺有限公司成立于2001年，是中央大型文旅企业华侨城集团文化业务板块核心成员。20多年来，公司围绕主题精品剧目、情景特技秀、大型主题节庆、大型文化晚会等业务方向，创作了一批演艺精品，逐步发展为高品质、独具标识性与市场竞争力的文化演艺企业。在专业化整合的新趋势下，文化演艺公司战略布局内容生产和渠道整合，聚焦演艺经纪和精品演艺两大核心赛道，推动华侨城演艺品牌升级，树立业内标杆，致力于将华侨城演艺打造成为兼具影响力与专业度的文化品牌。
 			</view>
@@ -29,14 +27,10 @@
 				<view class="case-info-title">
 					{{item.subject}}
 				</view>
-				<view class="case-info-tips">
-					{{item.detailDesc}}
+				<view class="case-info-tips" v-html="item.detailDesc">
 				</view>
 			</view>
-			<!-- <u-image class="case-img" :src="item.coverImage" mode="widthFix">
-				<view slot="error" style="font-size: 24rpx;">加载失败</view>
-			</u-image> -->
-			  <image class="case-img" :src="item.coverImage" mode="widthFix"></image>
+			<image class="case-img" :src="item.coverImage"></image>
 		</view>
 
 	</view>
@@ -45,7 +39,8 @@
 <script>
 	import {
 		getActivePreviewList,
-		getCaseList
+		getCaseList,
+		getBannerList
 	} from '@/api/home.js'
 	export default {
 		onLoad(options) {
@@ -71,6 +66,7 @@
 				list: [
 
 				], //渲染列表
+				bannerList: []
 
 			}
 		},
@@ -85,7 +81,9 @@
 					if (this.toTimestamp(item.activityStartTime) < timestamp && timestamp < this.toTimestamp(
 							item
 							.activityEndTime)) {
-						string += item.subject
+						console.log(item)
+						string += (item.location + '  ' + item.subject + '(时间:' + item.activityStartTime + '-' +
+							item.activityEndTime + ')')
 					}
 				})
 				return string
@@ -95,9 +93,29 @@
 			this.initData()
 		},
 		methods: {
+			// 点击banner轮播图
+			bannerClick(index, type) {
+				var bannerData = ''
+				var isJump = ''
+				bannerData = this.bannerList[index] // banner 信息
+				// 跳转类型0:app内跳转,1:第三方链接,2:不跳转
+				isJump = bannerData.bannerType
+				if (isJump == 0) { // app内跳转
+					uni.setStorageSync('active_detail_id', data.id)
+					uni.navigateTo({
+						url: '/pages/active/detail/index'
+					})
+				} else if (isJump == 1) { // 第三方链接
+					plus.runtime.openURL(bannerData.pageUrl)
+
+				} else { // 不跳转
+					return false
+				}
+			},
 			initData() {
 				this.getActivePreviewList()
 				this.getCaseList()
+				this.getBannerList()
 			},
 			toTimestamp(timeString) {
 				let date = new Date(timeString.replace(' ', 'T') + 'Z'); // 转为ISO格式
@@ -106,6 +124,17 @@
 			getActivePreviewList() {
 				getActivePreviewList().then(res => {
 					this.previewList = res.dataList
+				})
+			},
+			getBannerList() {
+				let params = {
+					pageSize: 100,
+					pageNum: 1
+				}
+				getBannerList(params).then(res => {
+					this.bannerList = res.dataList
+				}).catch(err => {
+
 				})
 			},
 			getCaseList() {
@@ -131,6 +160,15 @@
 <style lang="scss" scoped>
 	.content {
 		padding-bottom: 10rpx;
+		box-sizing: border-box;
+
+		/deep/.u-swiper {
+			margin: 0 auto;
+			width: 686rpx;
+			height: 226rpx;
+			border-radius: 24rpx;
+			background: none !important;
+		}
 
 		.home-top-banner {
 			width: 750rpx;
@@ -140,7 +178,7 @@
 		.notice-box {
 			width: 750rpx;
 			background-color: rgb(152, 4, 236);
-			padding: 16rpx;
+			padding: 8rpx;
 			box-sizing: border-box;
 
 			.notice-box-in {
@@ -148,7 +186,7 @@
 				align-items: center;
 				justify-content: space-between;
 				background-color: #FFF;
-				padding: 0 16rpx;
+				padding: 16rpx;
 
 				.notic-box-left {
 					writing-mode: vertical-rl;
@@ -161,11 +199,17 @@
 
 				/deep/.u-notice-bar {
 					padding: 0;
-					height: 124rpx;
-					line-height: 124rpx;
+					height: 62rpx;
+					line-height: 62rpx;
+
 					display: flex;
 					align-items: center;
 					background-color: #FFF !important;
+
+				}
+
+				/deep/.u-notice {
+					width: 100%;
 
 				}
 
@@ -186,7 +230,7 @@
 
 			.company-tips {
 				padding: 24rpx 24rpx 0;
-				font-size: 18rpx;
+				font-size: 26rpx;
 				line-height: 1.6;
 				font-family: "SimSun", "宋体", serif;
 			}
@@ -214,23 +258,21 @@
 
 			.case-info {
 				width: 340rpx;
+				max-height: 250rpx;
 
 				.case-info-title {
-					font-size: 20rpx;
+					font-size: 24rpx;
 					font-weight: 600;
 					font-family: "SimSun", "宋体", serif;
 					margin-bottom: 24rpx;
 				}
 
-				.case-info-tips {
-					font-size: 16rpx;
-					line-height: 1.8;
-					font-family: "SimSun", "宋体", serif;
-				}
+				.case-info-tips {}
 			}
 
 			.case-img {
 				width: 330rpx !important;
+				max-height: 250rpx;
 				border-radius: 32rpx;
 			}
 		}
