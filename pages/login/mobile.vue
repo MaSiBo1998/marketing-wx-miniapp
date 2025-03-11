@@ -15,7 +15,7 @@
         <!-- 手机号输入框 -->
         <u-input v-model="mobile" :maxlength="11" border="none" type="number" placeholder="请输入右侧图片验证码">
             <view class="input-info" slot="suffix">
-                <image class="code-img" src="../../static/logo.png" mode="widthFix"></image>
+<!--                <image class="code-img" src="../../static/logo.png" mode="widthFix"></image> -->
             </view>
         </u-input>
         <view class="login-btn" @click="toLogin()">

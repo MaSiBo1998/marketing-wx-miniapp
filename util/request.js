@@ -1,4 +1,4 @@
-export const baseURL = 'http://xcxapi.yiwaixiao.net'
+export const baseURL = 'https://xcxapi.yiwaixiao.net'
 
 export const request = (options) => {
 	return new Promise((resolve, reject) => {

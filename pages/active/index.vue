@@ -4,7 +4,10 @@
         <u-search shape="round" actionText="搜索" v-model="keyword" @search="getActiveList(1,10)"
             @custom="getActiveList(1,10,'reload')"></u-search>
         <view class="search-box">
-            <view class="search-box-item" v-for="item,index in locationList" :key="index"
+            <view :class="[location == ''?'select-item':'']" class="search-box-item" @click="location = ''">
+                全部
+            </view>
+            <view class="search-box-item" :class="[location == item?'select-item':'']" v-for="item,index in locationList" :key="index"
                 @click="location = item;getActiveList(1,10,'reload')">
                 {{item}}
             </view>
@@ -54,11 +57,12 @@
                 loadingText: '努力加载中',
                 loadmoreText: '轻轻上拉',
                 nomoreText: '没有更多了',
-                locationList: []
+                locationList: [],
+                location: ''
             }
         },
         onPullDownRefresh() { //上拉刷新
-
+            this.location = ''
             this.getActiveList(1, 10, 'reload')
             this.getActiveLocation()
             uni.stopPullDownRefresh();
@@ -220,6 +224,9 @@
                 padding: 8rpx 16rpx;
                 font-family: "SimSun", "宋体", serif;
                 font-size: 18rpx;
+            }
+            .select-item {
+                color:#3D8D7A;
             }
         }
 
