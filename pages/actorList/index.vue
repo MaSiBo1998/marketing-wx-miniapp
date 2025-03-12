@@ -120,9 +120,10 @@
 			justify-content: space-between;
 
 			.actor-item-img {
-				width: 96rpx;
-				height: 96rpx;
+				width: 126rpx;
+				height: 126rpx;
 				border-radius: 50%;
+                margin-right: 16rpx;
 			}
 
 			.actor-item-info {

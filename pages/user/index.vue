@@ -177,7 +177,9 @@
 			<view class="signup-list" v-if="!isEdit">
 				<u-list v-if="currentList.length > 0">
 					<u-list-item v-for="(item, index) in currentList" :key="index">
-						<u-cell :title="item.name" :label="item.registrationTime"></u-cell>
+						<u-cell :title="item.name">
+                            <u-tag  slot="right-icon" :text="item.registrationStatus === 0?'已报名':(item.registrationStatus == 1?'报名通过':(item.registrationStatus == 2?'报名拒绝':(item.registrationStatus == 3?'已作废':(item.registrationStatus === null?'未报名':''))))"  size="mini" :type="item.registrationStatus === 0?'success':(item.registrationStatus == 1?'success':(item.registrationStatus == 2?'error':(item.registrationStatus == 3?'warning':(item.registrationStatus === null?'success':''))))"></u-tag>
+                        </u-cell>
 					</u-list-item>
 				</u-list>
 				<view v-else>
@@ -653,7 +655,7 @@
 	}
 
 	.container {
-		background-color: #EEE;
+		background-color: rgb(232, 247, 235);
 		// min-height: 100vh;
 		padding-top: 180rpx;
 		box-sizing: border-box;
