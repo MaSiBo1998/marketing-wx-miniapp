@@ -2,7 +2,7 @@
     <view class="content">
         <u-loading-page bg-color="#e8e8e8" :loading="loading" loading-text="加载中..."></u-loading-page>
         <!-- 轮播图 -->
-        <u-swiper imgMode="widthFix" keyName="bannerImage" @tap="bannerClick($event,type)" radius="24rpx"
+        <u-swiper imgMode="heightFix" keyName="coverImage" @click="bannerClick"  height="240"
             interval="3000" duration="300" :list="bannerList"></u-swiper>
         <view class="notice-box" v-if="noticeString">
             <view class="notice-box-in">
@@ -32,7 +32,6 @@
             </view>
             <image class="case-img" :src="item.coverImage"></image>
         </view>
-
     </view>
 </template>
 
@@ -75,16 +74,21 @@
                 let arr = []
                 let string = ''
                 let timestamp = Date.now();
-                this.previewList.forEach(item => {
-                    if (this.toTimestamp(item.activityStartTime) < timestamp && timestamp < this.toTimestamp(
-                            item
-                            .activityEndTime)) {
-
-                        string += (item.location + '  ' + item.subject + '(时间:' + item.activityStartTime + '-' +
-                            item.activityEndTime + ')')
-                    }
-                })
-                return string
+                if(this.previewList &&this.previewList.length>0){
+                    this.previewList.forEach(item => {
+                        if (this.toTimestamp(item.activityStartTime) < timestamp && timestamp < this.toTimestamp(
+                                item.activityEndTime)) {
+                    
+                            string += (item.location + '  ' + item.subject + '(时间:' + item.activityStartTime.slice(0,16) + '-' +
+                                item.activityEndTime.slice(0,16) + ')') + '   '
+                        }
+                    })
+                    console.log(string)
+                    return string
+                }else{
+                    return ''
+                }
+                
             },
         },
         onLoad() {
@@ -92,18 +96,20 @@
         },
         methods: {
             // 点击banner轮播图
-            bannerClick(index, type) {
+            bannerClick(index) {
+                console.log(index)
                 var bannerData = ''
                 var isJump = ''
                 bannerData = this.bannerList[index] // banner 信息
                 // 跳转类型0:app内跳转,1:第三方链接,2:不跳转
-                isJump = bannerData.bannerType
-                if (isJump == 0) { // app内跳转
-                    uni.setStorageSync('active_detail_id', data.id)
+                isJump = bannerData.routeType
+                console.log(isJump)
+                if (isJump == 1) { // app内跳转
+                    uni.setStorageSync('active_detail_id', bannerData.activityId)
                     uni.navigateTo({
                         url: '/pages/active/detail/index'
                     })
-                } else if (isJump == 1) { // 第三方链接
+                } else if (isJump == 2) { // 第三方链接
                     plus.runtime.openURL(bannerData.pageUrl)
 
                 } else { // 不跳转
@@ -130,6 +136,7 @@
                     pageNum: 1
                 }
                 getBannerList(params).then(res => {
+                    console.log(res.dataList)
                     this.bannerList = res.dataList
                 }).catch(err => {
 
@@ -161,10 +168,10 @@
         box-sizing: border-box;
 
         /deep/.u-swiper {
-            margin: 0 auto;
-            width: 686rpx;
-            height: 226rpx;
-            border-radius: 24rpx;
+            margin: 0 auto 16rpx;
+            width: 750rpx;
+          
+            border-radius: 0;
             background: none !important;
         }
 
@@ -267,7 +274,18 @@
                     margin-bottom: 24rpx;
                 }
 
-                .case-info-tips {}
+                .case-info-tips {
+                    width: 340rpx;
+                    max-width: 340rpx;
+                    /* 可选：限制最大宽度（适合小程序） */
+                    overflow: hidden;
+                    /* 直接隐藏溢出内容 */
+                    word-wrap: break-word;
+                    /* 长单词或URL换行 */
+                    white-space: normal;
+                    /* 覆盖默认 nowrap */
+                    font-size: 24rpx;
+                }
             }
 
             .case-img {

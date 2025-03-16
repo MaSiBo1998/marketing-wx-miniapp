@@ -113,7 +113,7 @@
 					演出案例：
 				</view>
 			</u-input>
-			<view class="user-info-item">
+			<!-- <view class="user-info-item">
 				<view class="user-info-item-left" style="width: 150rpx;">
 					代表图：
 				</view>
@@ -136,7 +136,39 @@
 					<u-upload accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic" name="2" multiple
 						:maxCount="1"></u-upload>
 				</view>
-			</view>
+			</view> -->
+            <!-- 代表图 -->
+            <view class="video-box">
+                <u-tabs @click="changeTabImg" :list="list" lineWidth="30" lineColor="#3D8D7A" :activeStyle="{
+                            color: '#3D8D7A',
+                            fontWeight: 'bold',
+                            transform: 'scale(1.05)'
+                        }" :inactiveStyle="{
+                            color: '#606266',
+                            transform: 'scale(1)'
+                        }" itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;">
+                </u-tabs>
+                <view v-if="tabIndex == 0" style="margin-top: 16rpx;">
+                    <view class="user-info-item-right" v-if="!isEdit">
+                        <u-album :urls="userInfo.coverImage" :maxCount="9"></u-album>
+                    </view>
+                    <view class="user-info-item-right" v-else>
+                        <u-upload :previewFullImage="true" :fileList="fileList1" @afterRead="afterRead"
+                            @delete="deletePic" name="1" multiple :maxCount="9"></u-upload>
+                    </view>
+                </view>
+                <view v-else style="margin-top: 16rpx;">
+                    <view class="user-info-item-right" v-if="!isEdit">
+                        <u-swiper :list="[{
+                           url:userInfo.videoClipUrl
+                       }]" keyName="url" :autoplay="false"></u-swiper>
+                    </view>
+                    <view class="user-info-item-right" v-else>
+                        <u-upload accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic"
+                            name="2" multiple :maxCount="1"></u-upload>
+                    </view>
+                </view>
+            </view>
 			<view class="bottom-card">
 				<view v-if="type == 'register'" class="login-btn" @click="toSubmit()">
 					立即注册
@@ -233,7 +265,13 @@
 					[],
 				],
 				type: '', //register注册,sign //报名
-				isAlreadyRegister: false
+				isAlreadyRegister: false,
+                list: [{
+                    name: '代表图'
+                }, {
+                    name: '代表视频'
+                }],
+                tabIndex: 0,
 			}
 		},
 		onShow() {
@@ -244,6 +282,10 @@
 			this.getActorOne()
 		},
 		methods: {
+            changeTabImg(e) {
+                console.log(e)
+                this.tabIndex = e.index
+            },
 			open(index) {
 				if (!this.isEdit) {
 					return false
@@ -331,7 +373,14 @@
 				let params = {
 					activityId: uni.getStorageSync('active_detail').id
 				}
-				console.log(uni.getStorageSync('active_detail'))
+                if(this.isEdit){
+                    uni.showToast({
+                    	title: '请先提交编辑信息后,再报名',
+                    	icon: 'none',
+                    	duration: 2000
+                    })
+                    return false
+                }
 				toSignUp(params).then(res => {
 					console.log(res)
 					uni.switchTab({
@@ -575,6 +624,38 @@
 			}
 		}
 	}
+    .video-box {
+        /deep/.u-tabs__wrapper__nav__item {
+            box-sizing: border-box;
+            width: 50%;
+        }
+    
+        /deep/.u-album__row {
+            justify-content: space-around;
+        }
+    
+        /deep/.u-album__row__wrapper {
+            width: 180rpx;
+            height: 300rpx;
+            box-sizing: border-box;
+            margin-right: 0 !important;
+            justify-content: space-around;
+    
+            image {
+                width: 180rpx !important;
+                height: 300rpx !important;
+                border-radius: 16rpx;
+                box-sizing: border-box;
+            }
+    
+            uni-image {
+                width: 180rpx !important;
+                height: 300rpx !important;
+                border-radius: 16rpx;
+                box-sizing: border-box;
+            }
+        }
+    }
 
 	.signup-list {
 		margin-top: 30rpx;

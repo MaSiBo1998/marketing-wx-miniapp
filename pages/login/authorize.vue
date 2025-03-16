@@ -1,7 +1,7 @@
 <template>
     <view class="content">
         <image class="avatar-img" src="@/static/login/avatar.png" mode=""></image>
-        <button class="login-btn" @click="toLogin()" open-type="chooseAvatar">
+        <button class="login-btn" @click="toLogin()">
             一键授权登录
         </button>
         <!-- <view class="change-mobile" @click="toMobileLogin()">
@@ -61,7 +61,9 @@
                                 duration: 1200
                             });
                             uni.setStorageSync('token', res.token)
-                            _this.getActorOne()
+                            uni.navigateBack({
+                            	delta: 1
+                            });
                         }).catch(err => {
                             console.log(err, 234324)
                             uni.showToast({

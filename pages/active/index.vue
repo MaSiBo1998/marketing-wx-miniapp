@@ -71,6 +71,8 @@
 		onHide() {
 			uni.stopPullDownRefresh();
 		},
+        onShow() {
+        },
 		onLoad() {
 			this.getActiveList(1, 10, 'reload')
 			this.getActiveLocation()

@@ -12,46 +12,29 @@ export const request = (options) => {
 			},
 			success: (res) => {
 				uni.hideLoading();
-				if (res.data.code == 0 ) {
+                console.log(res.data)
+				if(res.data.code == 0){
 					resolve(res.data.data)
-				} else if (res.data.code == 600){
-					resolve(res.data)
-				}
-				else {
-					if (res.data.code == 301) { //token过期
-						// uni.showToast({
-						// 	title: '更多功能,请先登录',
-						// 	icon: 'none',
-						// 	duration: 1200
-						// })
-						// setTimeout(()=> {
-						// 	uni.navigateTo({
-						// 		url: '/pages/login/authorize'
-						// 	})
-						// },1000)
-						return false
-						
-					}
-					if(res.data.code == 0){
-						resolve(res.data)
-					}else if (res.data.code == 301){
-						uni.showToast({
-							title: '登录已过期,请重新登录',
-							icon: 'none',
-							duration: 1200
-						})
-						uni.navigateTo({
-							url:'/pages/login/authorize'
-						})
-					}else{
-						uni.showToast({
-							title: res.data.msg,
-							icon: 'none',
-							duration: 1200
-						})
-						reject(res.data)
-					}
+				}else if (res.data.code == 301){
+				    uni.removeStorageSync('token')
+					uni.showToast({
+						title: '登录已过期,请重新登录',
+						icon: 'none',
+						duration: 1200
+					})
+                    setTimeout(() =>{
+                        uni.navigateTo({
+                        	url:'/pages/login/authorize'
+                        })
+                    },1500)
 					
+				}else{
+					uni.showToast({
+						title: res.data.msg,
+						icon: 'none',
+						duration: 1200
+					})
+					reject(res.data)
 				}
 			},
 			// 这里的接口请求，如果出现问题就输出接口请求失败

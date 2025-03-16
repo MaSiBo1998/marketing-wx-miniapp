@@ -6,8 +6,8 @@
                     <view class="title-1">
                         {{actorDetail.name}}
                     </view>
-                    <view class="title-2">
-                        {{actorDetail.gender== 1?'男':'女'}}
+                    <view class="title-3">
+                        性别: {{actorDetail.gender== 1?'男':(actorDetail.gender=== 0?'女':'')}}
                     </view>
                     <view class="title-3">
                         年龄: <text>{{actorDetail.age?actorDetail.age:'未知'}}</text>
@@ -21,11 +21,20 @@
                 </view>
                 <image class="home-img" :src="actorDetail.homeImage" mode=""></image>
             </view>
-            <view class="img-box">
-                代表图: <u-album singleSize="50" multipleSize="50" :urls="actorDetail.coverImage" :maxCount="9"></u-album>
-            </view>
-            <view class="img-box">
-                演示视频: <u-album singleSize="50" multipleSize="50" :urls="[actorDetail.videoClipUrl]" :maxCount="1"></u-album>
+            <u-tabs @click="changeTab" :list="list" lineWidth="30" lineColor="#3D8D7A" :activeStyle="{
+                        color: '#3D8D7A',
+                        fontWeight: 'bold',
+                        transform: 'scale(1.05)'
+                    }" :inactiveStyle="{
+                        color: '#606266',
+                        transform: 'scale(1)'
+                    }" itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;">
+            </u-tabs>
+            <view class="tab-box">
+                <u-album v-if="tabIndex == 0" :urls="actorDetail.coverImage" :maxCount="9"></u-album>
+                <u-swiper v-else :list="[{
+                    url:actorDetail.videoClipUrl
+                }]" keyName="url" :autoplay="false"></u-swiper>
             </view>
             <view class="title-4">
                 毕业院校: <text>{{actorDetail.graduationSchool?actorDetail.graduationSchool:'无'}}</text>
@@ -69,11 +78,21 @@
                     height: '',
                     weight: '',
                     pastExperiences: ''
-                }
+                },
+                list: [{
+                    name: '代表图'
+                }, {
+                    name: '代表视频'
+                }],
+                tabIndex: 0,
             }
         },
         computed: {},
         methods: {
+            changeTab(e) {
+                console.log(e)
+                this.tabIndex = e.index
+            },
             getActorOneDetail() {
                 let params = {
                     userId: uni.getStorageSync('actor_detail').userId
@@ -98,7 +117,7 @@
         width: 750rpx;
         background-color: #EEE;
         min-height: 100vh;
-        padding-top: 20rpx;
+        padding: 20rpx 0 40rpx;
         box-sizing: border-box;
 
         .actor-box {
@@ -143,7 +162,7 @@
 
             .title-2 {
 
-                font-size: 36rpx;
+                font-size: 26rpx;
                 color: #b9b9b9;
                 font-weight: 600;
             }
@@ -155,27 +174,64 @@
 
                 text {
                     padding-left: 12rpx;
-                    font-size: 32rpx;
+                    font-size: 36rpx;
                     color: #b9b9b9;
                 }
             }
+
             .title-4 {
                 margin-bottom: 16rpx;
-                font-size: 36rpx;
+                font-size: 26rpx;
+                font-weight: 600;
+
                 text {
                     padding-left: 12rpx;
-                    font-size: 32rpx;
+                    font-size: 26rpx;
                     color: #b9b9b9;
                 }
             }
-            .img-box {
-                margin-bottom: 16rpx;
-                font-size: 36rpx;
-                display: flex;
-                align-items: flex-start;
-                justify-content: flex-start;
+
+            // /deep/.u-tabs__wrapper__nav {
+            //     justify-content: space-around;
+            // }
+            // /deep/.u-tabs__wrapper__nav__line {
+            //     left: 88rpx;
+            // }
+            /deep/.u-tabs__wrapper__nav__item {
+                box-sizing: border-box;
+                width: 50%;
             }
-            
+
+            /deep/.u-album__row {
+                justify-content: space-around;
+            }
+
+            /deep/.u-album__row__wrapper {
+                width: 180rpx;
+                height: 300rpx;
+                box-sizing: border-box;
+                margin-right: 0 !important;
+                justify-content: space-around;
+
+                image {
+                    width: 180rpx !important;
+                    height: 300rpx !important;
+                    border-radius: 16rpx;
+                    box-sizing: border-box;
+                }
+
+                uni-image {
+                    width: 180rpx !important;
+                    height: 300rpx !important;
+                    border-radius: 16rpx;
+                    box-sizing: border-box;
+                }
+            }
+
+            .tab-box {
+                margin: 16rpx auto;
+            }
+
 
             .title {
                 display: block;
