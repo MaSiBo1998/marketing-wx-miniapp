@@ -170,7 +170,6 @@
 					})
 				} else {
 					if (uni.getStorageSync('token')) {
-						uni.setStorageSync('active_detail', data)
 						// uni.navigateTo({
 						// 	url: '/pages/active/detail/index'
 						// })

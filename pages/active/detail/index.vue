@@ -83,12 +83,8 @@
             }
         },
         onUnload() {
-            uni.removeStorageSync('active_detail')
-
-
         },
         onLoad() {
-            console.log(uni.getStorageSync('active_detail'))
             this.activityId = uni.getStorageSync('active_detail_id')
             if (this.activityId) {
                 this.getActiveOne()
@@ -108,6 +104,7 @@
                 });
                 getActiveOne(params).then(res => {
                     this.detail = res
+                    this.detail.detailDesc = res.detailDesc.replace(/<img/g, '<img style="width:100%"').replace(/<p/g, '<p style="color:rgb(153, 153, 153);font-size:26rpx"')
                 }).catch(err => {
                     uni.switchTab({
                         url: '/pages/active/index'
@@ -267,6 +264,11 @@
             color: black;
             line-height: 1.6;
             overflow-wrap: break-word;
+            width: 750rpx;
+            img {
+                width: 686rpx !important;
+            }
+            
         }
 
         .subtim-bottom {
