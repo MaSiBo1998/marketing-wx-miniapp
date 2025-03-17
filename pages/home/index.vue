@@ -2,8 +2,8 @@
     <view class="content">
         <u-loading-page bg-color="#e8e8e8" :loading="loading" loading-text="加载中..."></u-loading-page>
         <!-- 轮播图 -->
-        <u-swiper imgMode="heightFix" keyName="coverImage" @click="bannerClick"  height="240"
-            interval="3000" duration="300" :list="bannerList"></u-swiper>
+        <u-swiper imgMode="heightFix" keyName="coverImage" @click="bannerClick" height="240" interval="3000"
+            duration="300" :list="bannerList"></u-swiper>
         <view class="notice-box" v-if="noticeString">
             <view class="notice-box-in">
                 <view class="notic-box-left">
@@ -22,12 +22,13 @@
         <view class="case-title">
             经典案例
         </view>
-        <view class="case-box" v-for="item,index in caseList" :key="index">
+        <view class="case-box" v-for="item,index in caseList" :key="index" @click="toCaseDetail(item)">
             <view class="case-info">
                 <view class="case-info-title">
                     {{item.subject}}
                 </view>
-                <view class="case-info-tips" v-html="item.detailDesc">
+                <view class="case-info-tips" >
+                    {{item.detail}}
                 </view>
             </view>
             <image class="case-img" :src="item.coverImage"></image>
@@ -74,27 +75,35 @@
                 let arr = []
                 let string = ''
                 let timestamp = Date.now();
-                if(this.previewList &&this.previewList.length>0){
+                if (this.previewList && this.previewList.length > 0) {
                     this.previewList.forEach(item => {
-                        if (this.toTimestamp(item.activityStartTime) < timestamp && timestamp < this.toTimestamp(
+                        if (this.toTimestamp(item.activityStartTime) < timestamp && timestamp < this
+                            .toTimestamp(
                                 item.activityEndTime)) {
-                    
-                            string += (item.location + '  ' + item.subject + '(时间:' + item.activityStartTime.slice(0,16) + '-' +
-                                item.activityEndTime.slice(0,16) + ')') + '   '
+
+                            string += (item.location + '  ' + item.subject + '(时间:' + item.activityStartTime
+                                .slice(0, 16) + '-' +
+                                item.activityEndTime.slice(0, 16) + ')') + '   '
                         }
                     })
                     console.log(string)
                     return string
-                }else{
+                } else {
                     return ''
                 }
-                
+
             },
         },
         onLoad() {
             this.initData()
         },
         methods: {
+            toCaseDetail(data) {
+                uni.setStorageSync('case_detail', data)
+                uni.navigateTo({
+                    url: '/pages/home/detail/index'
+                })
+            },
             // 点击banner轮播图
             bannerClick(index) {
                 console.log(index)
@@ -149,13 +158,48 @@
                 }
                 this.loading = true
                 getCaseList(params).then(res => {
-                    console.log(res)
-                    this.caseList = res.dataList
+                    this.caseList = []
+                    res.dataList.forEach(item => {
+                        item.detail = this.getPlainTextPreview(item.detailDesc)
+                        this.caseList.push(item)
+                    })
+                    // try{
+                    //     console.log(123,this.getPlainTextPreview(res.dataList[0].detailDesc))
+                    // }catch(e){
+                    //     console.log(e)
+                    //     //TODO handle the exception
+                    // }
+                    
                     this.loading = false
                 }).catch(err => {
                     this.loading = false
                 })
             },
+            getPlainTextPreview(html) {
+                if (typeof html !== 'string') return ''
+                  
+                  // 步骤1：去除所有HTML标签（兼容自闭合标签）
+                  const stripped = html
+                    .replace(/<[^>]+>|<\/[^>]+>/g, ' ')      // 替换标签为空格
+                    .replace(/\s+/g, ' ')                     // 合并连续空格
+                    .trim()
+                
+                  // 步骤2：解码常见HTML实体
+                  const entities = {
+                    '&amp;': '&',
+                    '&lt;': '<',
+                    '&gt;': '>',
+                    '&nbsp;': ' ',
+                    '&quot;': '"',
+                    '&#39;': "'"
+                  }
+                  const decoded = stripped.replace(/&(amp|lt|gt|nbsp|quot|#39);/g, (m) => entities[m] || m)
+                
+                  // 步骤3：安全截断文字
+                  return decoded.length > 75 
+                    ? decoded.substr(0, 75) + '...' 
+                    : decoded
+            }
         }
 
 
@@ -170,7 +214,7 @@
         /deep/.u-swiper {
             margin: 0 auto 16rpx;
             width: 750rpx;
-          
+
             border-radius: 0;
             background: none !important;
         }

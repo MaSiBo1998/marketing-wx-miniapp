@@ -34,8 +34,8 @@
                     女:{{detail.requiredMaleNumber- detail.femaleRegisteredNumber}}人
                 </view> -->
                 <view class="detail-box-top-right">
-                    总人数:{{detail.requiredTotalNumber}}人  |  男:{{detail.requiredFemaleNumber}}人  |  女:{{detail.requiredMaleNumber}}人  |  
-                    已录用: {{detail.registeredNumber}}人  |  
+                    总人数:{{detail.requiredTotalNumber}}人  男:{{detail.requiredFemaleNumber}}   女:{{detail.requiredMaleNumber}} |  
+                    已录用: {{detail.registeredNumber}}人    
                     剩余:{{detail.lackNumber}}人
                 </view>
             </view>
