@@ -16,8 +16,8 @@
         <view class="time-line">
             <view class="time-line-left">
                 时效 <view class="date">
-                    活动时间:{{detail.activityStartTime}}-{{detail.activityEndTime}}<br>
-                    报名截止: {{detail.registrationDeadline}}
+                    活动时间:{{detail.activityStartTime.slice(0,16)}}-{{detail.activityEndTime.slice(0,16)}}<br>
+                    报名截止: {{detail.registrationDeadline.slice(0,16)}}
                 </view>
             </view>
             <u-icon name="share-square" size="28"></u-icon>

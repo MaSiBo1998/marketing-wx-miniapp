@@ -22,8 +22,8 @@
 			</view>
 			<view class="active-box-bottom">
 				<view class="active-box-bottom-left">
-					活动时间:{{item.activityStartTime}}-{{item.activityEndTime}} <br>
-					报名截止: {{item.registrationDeadline}}
+					活动时间:{{item.activityStartTime.slice(0,16)}}-{{item.activityEndTime.slice(0,16)}} <br>
+					报名截止: {{item.registrationDeadline.slice(0,16)}}
 				</view>
 				<view class="active-box-bottom-right" @click.stop="toSignUp(item)"
 					:class="[item.registrationStatus === null?'sign-bg':'']">
