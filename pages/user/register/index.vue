@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="card">
-<view class="user-info-item">
+			<view class="user-info-item">
 				<view class="user-info-item-left" style="width: 150rpx;">
 					头像：
 				</view>
@@ -137,9 +137,9 @@
 						:maxCount="1"></u-upload>
 				</view>
 			</view> -->
-            <!-- 代表图 -->
-            <view class="video-box">
-                <u-tabs @click="changeTabImg" :list="list" lineWidth="30" lineColor="#3D8D7A" :activeStyle="{
+			<!-- 代表图 -->
+			<view class="video-box">
+				<u-tabs @click="changeTabImg" :list="list" lineWidth="30" lineColor="#3D8D7A" :activeStyle="{
                             color: '#3D8D7A',
                             fontWeight: 'bold',
                             transform: 'scale(1.05)'
@@ -147,28 +147,26 @@
                             color: '#606266',
                             transform: 'scale(1)'
                         }" itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;">
-                </u-tabs>
-                <view v-if="tabIndex == 0" style="margin-top: 16rpx;">
-                    <view class="user-info-item-right" v-if="!isEdit">
-                        <u-album :urls="userInfo.coverImage" :maxCount="9"></u-album>
-                    </view>
-                    <view class="user-info-item-right" v-else>
-                        <u-upload :previewFullImage="true" :fileList="fileList1" @afterRead="afterRead"
-                            @delete="deletePic" name="1" multiple :maxCount="9"></u-upload>
-                    </view>
-                </view>
-                <view v-else style="margin-top: 16rpx;">
-                    <view class="user-info-item-right" v-if="!isEdit">
-                        <u-swiper :list="[{
-                           url:userInfo.videoClipUrl
-                       }]" keyName="url" :autoplay="false"></u-swiper>
-                    </view>
-                    <view class="user-info-item-right" v-else>
-                        <u-upload accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic"
-                            name="2" multiple :maxCount="1"></u-upload>
-                    </view>
-                </view>
-            </view>
+				</u-tabs>
+				<view v-if="tabIndex == 0" style="margin-top: 16rpx;">
+					<view class="user-info-item-right" v-if="!isEdit">
+						<u-album :urls="userInfo.coverImage" :maxCount="9"></u-album>
+					</view>
+					<view class="user-info-item-right" v-else>
+						<u-upload :previewFullImage="true" :fileList="fileList1" @afterRead="afterRead"
+							@delete="deletePic" name="1" multiple :maxCount="9"></u-upload>
+					</view>
+				</view>
+				<view v-else style="margin-top: 16rpx;">
+					<view class="user-info-item-right" v-if="!isEdit">
+						<video id="video" :src="userInfo.videoClipUrl" controls></video>
+					</view>
+					<view class="user-info-item-right" v-else>
+						<u-upload accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic"
+							name="2" multiple :maxCount="1"></u-upload>
+					</view>
+				</view>
+			</view>
 			<view class="bottom-card">
 				<view v-if="type == 'register'" class="login-btn" @click="toSubmit()">
 					立即注册
@@ -266,26 +264,26 @@
 				],
 				type: '', //register注册,sign //报名
 				isAlreadyRegister: false,
-                list: [{
-                    name: '代表图'
-                }, {
-                    name: '代表视频'
-                }],
-                tabIndex: 0,
+				list: [{
+					name: '代表图'
+				}, {
+					name: '代表视频'
+				}],
+				tabIndex: 0,
 			}
 		},
 		onShow() {
-			
+
 		},
 		onLoad(options) {
 			this.isEdit = false
 			this.getActorOne()
 		},
 		methods: {
-            changeTabImg(e) {
-                console.log(e)
-                this.tabIndex = e.index
-            },
+			changeTabImg(e) {
+				console.log(e)
+				this.tabIndex = e.index
+			},
 			open(index) {
 				if (!this.isEdit) {
 					return false
@@ -371,21 +369,31 @@
 			},
 			toSignUp(type) {
 				let params = {
-					activityId: uni.getStorageSync('active_detail').id
+					activityId: uni.getStorageSync('active_detail_id')
 				}
-                if(this.isEdit){
-                    uni.showToast({
-                    	title: '请先提交编辑信息后,再报名',
-                    	icon: 'none',
-                    	duration: 2000
-                    })
-                    return false
-                }
+				if (this.isEdit) {
+					uni.showToast({
+						title: '请先提交编辑信息后,再报名',
+						icon: 'none',
+						duration: 2000
+					})
+					return false
+				}
+				uni.showLoading({
+					title: '报名中...'
+				});
 				toSignUp(params).then(res => {
 					console.log(res)
-					uni.switchTab({
-                        url:'/pages/active/index'
+					uni.requestSubscribeMessage({
+						//此处填写刚才申请模板的模板ID
+						tmplIds: ['WIx0_ZMSAD4R0gFACK2djg7DQW-GN-QtFZ6EmKJHIbM'],
+						success(res) {
+							uni.switchTab({
+								url: '/pages/active/index'
+							})
+						}
 					})
+					
 				}).catch(err => {
 					uni.showToast({
 						title: err.msg,
@@ -449,13 +457,13 @@
 						fileListLen,
 						1,
 						Object.assign(item, {
-							status: result?"success":'error',
+							status: result ? "success" : 'error',
 							message: "",
-							url: result?result:'',
+							url: result ? result : '',
 						})
 					);
 					fileListLen++;
-					if(!result){
+					if (!result) {
 						this[`fileList${event.name}`].splice(event.index, 1)
 					}
 				}
@@ -599,6 +607,10 @@
 		}
 	}
 
+	#video {
+		width: 622rpx;
+	}
+
 	.user-info-item {
 		width: 622rpx;
 		margin: 0 auto;
@@ -624,38 +636,39 @@
 			}
 		}
 	}
-    .video-box {
-        /deep/.u-tabs__wrapper__nav__item {
-            box-sizing: border-box;
-            width: 50%;
-        }
-    
-        /deep/.u-album__row {
-            justify-content: space-around;
-        }
-    
-        /deep/.u-album__row__wrapper {
-            width: 180rpx;
-            height: 300rpx;
-            box-sizing: border-box;
-            margin-right: 0 !important;
-            justify-content: space-around;
-    
-            image {
-                width: 180rpx !important;
-                height: 300rpx !important;
-                border-radius: 16rpx;
-                box-sizing: border-box;
-            }
-    
-            uni-image {
-                width: 180rpx !important;
-                height: 300rpx !important;
-                border-radius: 16rpx;
-                box-sizing: border-box;
-            }
-        }
-    }
+
+	.video-box {
+		/deep/.u-tabs__wrapper__nav__item {
+			box-sizing: border-box;
+			width: 50%;
+		}
+
+		/deep/.u-album__row {
+			justify-content: space-around;
+		}
+
+		/deep/.u-album__row__wrapper {
+			width: 180rpx;
+			height: 300rpx;
+			box-sizing: border-box;
+			margin-right: 0 !important;
+			justify-content: space-around;
+
+			image {
+				width: 180rpx !important;
+				height: 300rpx !important;
+				border-radius: 16rpx;
+				box-sizing: border-box;
+			}
+
+			uni-image {
+				width: 180rpx !important;
+				height: 300rpx !important;
+				border-radius: 16rpx;
+				box-sizing: border-box;
+			}
+		}
+	}
 
 	.signup-list {
 		margin-top: 30rpx;

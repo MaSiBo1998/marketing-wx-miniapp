@@ -32,9 +32,10 @@
             </u-tabs>
             <view class="tab-box">
                 <u-album v-if="tabIndex == 0" :urls="actorDetail.coverImage" :maxCount="9"></u-album>
-                <u-swiper v-else :list="[{
+				<video id="video" v-else :src="actorDetail.videoClipUrl"  controls></video>
+                <!-- <u-swiper v-else :list="[{
                     url:actorDetail.videoClipUrl
-                }]" keyName="url" :autoplay="false"></u-swiper>
+                }]" keyName="url" :autoplay="false"></u-swiper> -->
             </view>
             <view class="title-4">
                 毕业院校: <text>{{actorDetail.graduationSchool?actorDetail.graduationSchool:'无'}}</text>
@@ -230,6 +231,9 @@
 
             .tab-box {
                 margin: 16rpx auto;
+				#video {
+					width: 100%;
+				}
             }
 
 

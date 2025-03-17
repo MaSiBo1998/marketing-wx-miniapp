@@ -140,6 +140,7 @@
                         duration: 1200
                     })
                 } else {
+					uni.setStorageSync('active_detail_id', this.detail.id)
                     uni.navigateTo({
                         url: '/pages/user/register/index?type=sign'
                     })

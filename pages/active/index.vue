@@ -72,6 +72,8 @@
 			uni.stopPullDownRefresh();
 		},
         onShow() {
+			this.getActiveList(1, 10, 'reload')
+			this.getActiveLocation()
         },
 		onLoad() {
 			this.getActiveList(1, 10, 'reload')
@@ -160,8 +162,8 @@
 
 			},
 			toSignUp(data) {
+				console.log(data)
 				let _this = this
-				console.log(data.registrationStatus, _this.statusFilter(data.registrationStatus))
 				if (data.registrationStatus !== null) {
 					uni.showToast({
 						title: _this.statusFilter(data.registrationStatus),
@@ -173,6 +175,7 @@
 						// uni.navigateTo({
 						// 	url: '/pages/active/detail/index'
 						// })
+						uni.setStorageSync('active_detail_id', data.id)
 						uni.navigateTo({
 							url: '/pages/user/register/index'
 						})
