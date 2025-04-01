@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+        <u-loading-page bg-color="#e8e8e8" :loading="loading" loading-text="加载中..."></u-loading-page>
 		<view class="card">
 			<view class="user-info-item">
 				<view class="user-info-item-left" style="width: 150rpx;">
@@ -61,23 +62,29 @@
 					kg
 				</view>
 			</u-input>
-			<u-input :disabled="!isEdit" v-model="userInfo.workingYears" border="none" placeholder="请输入从业年限">
-				<view class="input-info" slot="prefix">
-					从业年限：
-				</view>
-				<view class="input-info" slot="suffix">
-					年
-				</view>
-			</u-input>
+            <u-input :disabled="!isEdit" v-model="userInfo.graduationSchool" border="none" placeholder="请输入毕业院校">
+            	<view class="input-info" slot="prefix">
+            		毕业院校：
+            	</view>
+            </u-input>
+			
 			<view class="user-info-item" @click="open(0)">
 				<view class="user-info-item-left" style="width: 150rpx;">
-					特长1：
+					专业：
 				</view>
 				<view class="user-info-item-right">
 					{{userInfo.primarySkillCategory}}
 				</view>
 			</view>
-			<view class="user-info-item" @click="open(1)">
+            <u-input :disabled="!isEdit" v-model="userInfo.workingYears" border="none" placeholder="请输入从业年限">
+            	<view class="input-info" slot="prefix">
+            		从业年限：
+            	</view>
+            	<view class="input-info" slot="suffix">
+            		年
+            	</view>
+            </u-input>
+			<!-- <view class="user-info-item" @click="open(1)">
 				<view class="user-info-item-left" style="width: 150rpx;">
 					特长2：
 				</view>
@@ -92,25 +99,21 @@
 				<view class="user-info-item-right">
 					{{userInfo.thirdlySkillCategory}}
 				</view>
-			</view>
+			</view> -->
 			<u-input :disabled="!isEdit" v-model="userInfo.otherProfessionalCategory" border="none" placeholder="请输入特长">
 				<view class="input-info" slot="prefix">
 					其他特长：
 				</view>
 			</u-input>
-			<u-input :disabled="!isEdit" v-model="userInfo.graduationSchool" border="none" placeholder="请输入毕业院校">
+			
+			<u-input :disabled="!isEdit" v-model="userInfo.pastExperiences" border="none" placeholder="请输入获奖或行业资质">
 				<view class="input-info" slot="prefix">
-					毕业院校：
+					获奖或行业资质：
 				</view>
 			</u-input>
-			<u-input :disabled="!isEdit" v-model="userInfo.pastExperiences" border="none" placeholder="请输入过往经历">
+			<u-input :disabled="!isEdit" v-model="userInfo.performanceCases" border="none" placeholder="请输入演出(业绩)案例">
 				<view class="input-info" slot="prefix">
-					过往经历：
-				</view>
-			</u-input>
-			<u-input :disabled="!isEdit" v-model="userInfo.performanceCases" border="none" placeholder="请输入演出案例">
-				<view class="input-info" slot="prefix">
-					演出案例：
+					演出(业绩)案例：
 				</view>
 			</u-input>
 			<!-- <view class="user-info-item">
@@ -236,14 +239,14 @@
 				skillIndex: 0,
 				columns: [
 					["歌手类", "乐队类", "舞蹈", "非遗", "器乐", "戏曲", "特技/绝技绝活", "杂技", "魔术", "武术", "戏剧表演", "舞美设计", "灯光师",
-						"音响师", "服装设计", "服装管理", "多媒体", "场务"
+						"音响师", "服装设计", "服装管理", "多媒体", "场务","播音主持"
 					],
 					["音乐剧", "通俗", "美声", "民歌", "民族", "流行", "说唱"]
 				], // 动态列数据
 				columnData: [
 					["歌手类", "乐队类", "舞蹈", "非遗", "器乐", "戏曲", "特技/绝技绝活", "杂技", "魔术", "武术", "戏剧表演"],
 
-					["民乐", "流行音乐"],
+					["民乐", "流行音乐","西洋古典"],
 					["民族舞", "古典舞", "芭蕾舞", "爵士舞", "现代舞", "流行热舞"],
 					["国家级", "省级", "其他"],
 
@@ -261,6 +264,7 @@
 					[],
 					[],
 					[],
+                    [],
 				],
 				type: '', //register注册,sign //报名
 				isAlreadyRegister: false,
@@ -270,6 +274,7 @@
 					name: '代表视频'
 				}],
 				tabIndex: 0,
+                loading:true
 			}
 		},
 		onShow() {
@@ -335,6 +340,7 @@
 				getActorOne().then(res => {
 					console.log(res)
 					this.userInfo = res
+                    this.loading = false
 					this.userInfo.coverImage = res.coverImage.split(',')
 					this.isAlreadyRegister = res.name ? true : false
 					if (res.coverImage != '') {

@@ -1,7 +1,7 @@
 <template>
     <view class="content">
         <image class="avatar-img" src="@/static/login/avatar.png" mode=""></image>
-        <button class="login-btn" @click="toLogin()">
+        <button class="login-btn"  @click="toLogin()">
             一键授权登录
         </button>
         <!-- <view class="change-mobile" @click="toMobileLogin()">
@@ -13,8 +13,6 @@
             <image class="active-icon" @click="isAgree = !isAgree" v-else src="@/static/login/inactive.png" mode="">
             </image>
             我已阅读并同意<text class="text-1">
-                隐私协议
-            </text>和<text class="text-1">
                 服务政策
             </text>
         </view>
@@ -28,7 +26,7 @@
     export default {
         data() {
             return {
-                isAgree: true,
+                isAgree: false,
             }
         },
         methods: {

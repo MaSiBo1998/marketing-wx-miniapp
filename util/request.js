@@ -11,7 +11,10 @@ export const request = (options) => {
 				'token': uni.getStorageSync('token'),// options.token
 			},
 			success: (res) => {
-				uni.hideLoading();
+                setTimeout(() =>{
+                    uni.hideLoading();
+                },600)
+				
                 console.log(res.data)
 				if(res.data.code == 0){
 					resolve(res.data.data)

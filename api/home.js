@@ -19,3 +19,9 @@ export const getBannerList = (data) => request({
 	method: 'post',
 	data
 })
+//获取简介
+export const getHomeInfo = (data) => request({
+	url: '/mini/enterprise/getInfo',
+	method: 'post',
+	data
+})

@@ -13,10 +13,10 @@
             </view>
         </view>
         <view class="company-detail">
-            <image class="company-detail-img" src="http://edmfile.yiwaixiao.net/weixin/images/11_20250309210005714.png"
+            <image class="company-detail-img" :src="homeInfo.coverImage"
                 mode="widthFix"></image>
             <view class="company-tips">
-                华侨城文化演艺有限公司成立于2001年，是中央大型文旅企业华侨城集团文化业务板块核心成员。20多年来，公司围绕主题精品剧目、情景特技秀、大型主题节庆、大型文化晚会等业务方向，创作了一批演艺精品，逐步发展为高品质、独具标识性与市场竞争力的文化演艺企业。在专业化整合的新趋势下，文化演艺公司战略布局内容生产和渠道整合，聚焦演艺经纪和精品演艺两大核心赛道，推动华侨城演艺品牌升级，树立业内标杆，致力于将华侨城演艺打造成为兼具影响力与专业度的文化品牌。
+   {{homeInfo.detailDesc}}
             </view>
         </view>
         <view class="case-title">
@@ -27,8 +27,8 @@
                 <view class="case-info-title">
                     {{item.subject}}
                 </view>
-                <view class="case-info-tips" >
-                    {{item.detail}}
+                <view class="case-info-tips">
+                    {{item.caseTitle}}
                 </view>
             </view>
             <image class="case-img" :src="item.coverImage"></image>
@@ -40,7 +40,8 @@
     import {
         getActivePreviewList,
         getCaseList,
-        getBannerList
+        getBannerList,
+        getHomeInfo
     } from '@/api/home.js'
     export default {
         onLoad(options) {
@@ -66,7 +67,12 @@
                 list: [
 
                 ], //渲染列表
-                bannerList: []
+                bannerList: [],
+                newsList: [],
+                homeInfo: {
+                    coverImage: "http://edmfile.yiwaixiao.net/weixin/images/12_20250309210005714.png",
+                    detailDesc: "华侨城文化演艺有限公司成立于2001年，是中央大型文旅企业华侨城集团文化业务板块核心成员。20多年来，公司围绕主题精品剧目、情景特技秀、大型主题节庆、大型文化晚会等业务方向，创作了一批演艺精品，逐步发展为高品质、独具标识性与市场竞争力的文化演艺企业。在专业化整合的新趋势下，文化演艺公司战略布局内容生产和渠道整合，聚焦演艺经纪和精品演艺两大核心赛道，推动华侨城演艺品牌升级，树立业内标杆，致力于将华侨城演艺打造成为兼具影响力与专业度的文化品牌。"
+                }
 
             }
         },
@@ -107,10 +113,11 @@
             // 点击banner轮播图
             bannerClick(index) {
                 console.log(index)
+                let _this = this
                 var bannerData = ''
                 var isJump = ''
                 bannerData = this.bannerList[index] // banner 信息
-                // 跳转类型0:app内跳转,1:第三方链接,2:不跳转
+                // 跳转类型,1:活动,2:第三方 3 新闻
                 isJump = bannerData.routeType
                 console.log(isJump)
                 if (isJump == 1) { // app内跳转
@@ -118,8 +125,19 @@
                     uni.navigateTo({
                         url: '/pages/active/detail/index'
                     })
-                } else if (isJump == 2) { // 第三方链接
-                    plus.runtime.openURL(bannerData.pageUrl)
+                } else if (isJump == 2) {
+                    // plus.runtime.openURL(bannerData.pageUrl)
+
+                } else if (isJump == 3) {
+                    _this.newsList.forEach(item => {
+                        if (item.id == bannerData.caseId) {
+                            uni.setStorageSync('news_detail', item)
+                            uni.navigateTo({
+                                url: '/pages/home/news/index'
+                            })
+                        }
+                    })
+
 
                 } else { // 不跳转
                     return false
@@ -129,6 +147,7 @@
                 this.getActivePreviewList()
                 this.getCaseList()
                 this.getBannerList()
+                this.getHomeInfo()
             },
             toTimestamp(timeString) {
                 let date = new Date(timeString.replace(' ', 'T') + 'Z'); // 转为ISO格式
@@ -139,13 +158,18 @@
                     this.previewList = res.dataList
                 })
             },
+            getHomeInfo() {
+                getHomeInfo().then(res => {
+                    this.homeInfo = res
+                })
+            },
             getBannerList() {
                 let params = {
                     pageSize: 100,
                     pageNum: 1
                 }
                 getBannerList(params).then(res => {
-                    console.log(res.dataList)
+                    console.log('banner--------------', res.dataList)
                     this.bannerList = res.dataList
                 }).catch(err => {
 
@@ -153,15 +177,24 @@
             },
             getCaseList() {
                 let params = {
-                    pageSize: 8,
-                    pageNum: 1
+                    pageSize: 100,
+                    pageNum: 1,
                 }
                 this.loading = true
                 getCaseList(params).then(res => {
                     this.caseList = []
+                    this.newsList = []
+                    console.log('case--------------', res.dataList)
                     res.dataList.forEach(item => {
-                        item.detail = this.getPlainTextPreview(item.detailDesc)
-                        this.caseList.push(item)
+                        console.log(item.caseType)
+                        // item.detail = this.getPlainTextPreview(item.detailDesc)
+                        if (item.caseType == 1 && this.caseList.length != 8) {
+                            this.caseList.push(item)
+                        }
+                        if (item.caseType == 2) {
+                            this.newsList.push(item)
+                        }
+
                     })
                     // try{
                     //     console.log(123,this.getPlainTextPreview(res.dataList[0].detailDesc))
@@ -169,7 +202,7 @@
                     //     console.log(e)
                     //     //TODO handle the exception
                     // }
-                    
+
                     this.loading = false
                 }).catch(err => {
                     this.loading = false
@@ -177,28 +210,28 @@
             },
             getPlainTextPreview(html) {
                 if (typeof html !== 'string') return ''
-                  
-                  // 步骤1：去除所有HTML标签（兼容自闭合标签）
-                  const stripped = html
-                    .replace(/<[^>]+>|<\/[^>]+>/g, ' ')      // 替换标签为空格
-                    .replace(/\s+/g, ' ')                     // 合并连续空格
+
+                // 步骤1：去除所有HTML标签（兼容自闭合标签）
+                const stripped = html
+                    .replace(/<[^>]+>|<\/[^>]+>/g, ' ') // 替换标签为空格
+                    .replace(/\s+/g, ' ') // 合并连续空格
                     .trim()
-                
-                  // 步骤2：解码常见HTML实体
-                  const entities = {
+
+                // 步骤2：解码常见HTML实体
+                const entities = {
                     '&amp;': '&',
                     '&lt;': '<',
                     '&gt;': '>',
                     '&nbsp;': ' ',
                     '&quot;': '"',
                     '&#39;': "'"
-                  }
-                  const decoded = stripped.replace(/&(amp|lt|gt|nbsp|quot|#39);/g, (m) => entities[m] || m)
-                
-                  // 步骤3：安全截断文字
-                  return decoded.length > 75 
-                    ? decoded.substr(0, 75) + '...' 
-                    : decoded
+                }
+                const decoded = stripped.replace(/&(amp|lt|gt|nbsp|quot|#39);/g, (m) => entities[m] || m)
+
+                // 步骤3：安全截断文字
+                return decoded.length > 75 ?
+                    decoded.substr(0, 75) + '...' :
+                    decoded
             }
         }
 
