@@ -427,62 +427,65 @@
 				}
 			},
 			toLogin() {
-				let _this = this
-				uni.getUserProfile({ //获取到用户信息
-					desc: '登录后可同步数据',
-					success: async (obj) => {
-						let avatarUrl = obj.userInfo.avatarUrl
-						let nickName = obj.userInfo.nickName
-						// 调用 action ，请求登录接口
-						uni.login({
-							provider: 'weixin',
-							success: (res) => {
-								let params = {
-									code: res.code,
-									wxAvatarUrl: avatarUrl,
-									wxNickName: nickName,
-								}
-								uni.showLoading({
-									title: '登录中...'
-								});
+                uni.navigateTo({
+                    url:'/pages/login/authorize'
+                })
+				// let _this = this
+				// uni.getUserProfile({ //获取到用户信息
+				// 	desc: '登录后可同步数据',
+				// 	success: async (obj) => {
+				// 		let avatarUrl = obj.userInfo.avatarUrl
+				// 		let nickName = obj.userInfo.nickName
+				// 		// 调用 action ，请求登录接口
+				// 		uni.login({
+				// 			provider: 'weixin',
+				// 			success: (res) => {
+				// 				let params = {
+				// 					code: res.code,
+				// 					wxAvatarUrl: avatarUrl,
+				// 					wxNickName: nickName,
+				// 				}
+				// 				uni.showLoading({
+				// 					title: '登录中...'
+				// 				});
 
-								console.log(params)
-								// return
-								//获取到登录凭证
-								wxLoginCode(params).then(res => {
-									console.log(res)
-									uni.showToast({
-										title: '登录成功',
-										icon: 'none',
-										duration: 1200
-									});
-									uni.setStorageSync('token', res.token)
-									_this.isLogin = true
-									_this.getActorOne()
-								}).catch(err => {
-									console.log(err, 234324)
-									uni.showToast({
-										title: '登录失败,请重新登录',
-										icon: 'none',
-										duration: 1200
-									});
-								})
-							},
+				// 				console.log(params)
+				// 				// return
+				// 				//获取到登录凭证
+				// 				wxLoginCode(params).then(res => {
+				// 					console.log(res)
+				// 					uni.showToast({
+				// 						title: '登录成功',
+				// 						icon: 'none',
+				// 						duration: 1200
+				// 					});
+				// 					uni.setStorageSync('token', res.token)
+				// 					_this.isLogin = true
+				// 					_this.getActorOne()
+				// 				}).catch(err => {
+				// 					console.log(err, 234324)
+				// 					uni.showToast({
+				// 						title: '登录失败,请重新登录',
+				// 						icon: 'none',
+				// 						duration: 1200
+				// 					});
+				// 				})
+				// 			},
 
-						});
-					},
-					fail: () => {
-						uni.showToast({
-							title: '授权已取消',
-							icon: 'error',
-							mask: true,
-						});
-					},
-					complete: () => {
-						// 隐藏loading
-						uni.hideLoading();
-					},
-				});
+				// 		});
+				// 	},
+				// 	fail: () => {
+				// 		uni.showToast({
+				// 			title: '授权已取消',
+				// 			icon: 'error',
+				// 			mask: true,
+				// 		});
+				// 	},
+				// 	complete: () => {
+				// 		// 隐藏loading
+				// 		uni.hideLoading();
+				// 	},
+				// });
 			},
 			open(index) {
 				if (!this.isEdit) {
@@ -589,7 +592,7 @@
 			},
 			toPage() {
 				uni.navigateTo({
-					url: '/pages/login/authorize'
+					url: '/pages/login/authorize?route=user'
 				})
 			},
 

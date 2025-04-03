@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
-        <u-loading-page bg-color="#e8e8e8" :loading="loading" loading-text="加载中..."></u-loading-page>
-		<view class="card">
+        <u-loading-page v-if="loading" bg-color="#e8e8e8" :loading="loading" loading-text="加载中..."></u-loading-page>
+		<view class="card" v-else>
 			<view class="user-info-item">
 				<view class="user-info-item-left" style="width: 150rpx;">
 					头像：

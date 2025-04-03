@@ -21,6 +21,24 @@
                 </view>
                 <image class="home-img" :src="actorDetail.homeImage" mode=""></image>
             </view>
+            <view class="title-4">
+                毕业院校: <text>{{actorDetail.graduationSchool?actorDetail.graduationSchool:'无'}}</text>
+            </view>
+            <view class="title-4">
+                专业: <text>{{actorDetail.primarySkillCategory?actorDetail.primarySkillCategory:'无'}}</text>
+            </view>
+            <view class="title-4">
+                从业年限: <text>{{actorDetail.workingYears?actorDetail.workingYears + '年':'无'}}</text>
+            </view>
+            <view class="title-4">
+                其他特长: <text>{{actorDetail.otherProfessionalCategory?actorDetail.otherProfessionalCategory:'无'}}</text>
+            </view>
+            <view class="title-4">
+                获奖或行业资质: <text>{{actorDetail.pastExperiences?actorDetail.pastExperiences:'无'}}</text>
+            </view>
+            <view class="title-4">
+                演出(业绩)案例: <text>{{actorDetail.performanceCases?actorDetail.performanceCases:'无'}}</text>
+            </view>
             <u-tabs @click="changeTab" :list="list" lineWidth="30" lineColor="#3D8D7A" :activeStyle="{
                         color: '#3D8D7A',
                         fontWeight: 'bold',
@@ -37,27 +55,15 @@
                     url:actorDetail.videoClipUrl
                 }]" keyName="url" :autoplay="false"></u-swiper> -->
             </view>
-            <view class="title-4">
-                毕业院校: <text>{{actorDetail.graduationSchool?actorDetail.graduationSchool:'无'}}</text>
-            </view>
-            <view class="title-4">
-                特长1: <text>{{actorDetail.primarySkillCategory?actorDetail.primarySkillCategory:'无'}}</text>
-            </view>
-            <view class="title-4">
+            
+            
+            <!-- <view class="title-4">
                 特长2: <text>{{actorDetail.secondarySkillCategory?actorDetail.secondarySkillCategory:'无'}}</text>
             </view>
             <view class="title-4">
                 特长3: <text>{{actorDetail.thirdlySkillCategory?actorDetail.thirdlySkillCategory:'无'}}</text>
-            </view>
-            <view class="title-4">
-                其他特长: <text>{{actorDetail.otherProfessionalCategory?actorDetail.otherProfessionalCategory:'无'}}</text>
-            </view>
-            <view class="title-4">
-                演员过往经历: <text>{{actorDetail.pastExperiences?actorDetail.pastExperiences:'无'}}</text>
-            </view>
-            <view class="title-4">
-                经典案例: <text>{{actorDetail.performanceCases?actorDetail.performanceCases:'无'}}</text>
-            </view>
+            </view> -->
+            
         </view>
 
     </view>

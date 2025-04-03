@@ -16,8 +16,8 @@
         <view class="time-line">
             <view class="time-line-left">
                 时效 <view class="date">
-                    活动时间:{{detail.activityStartTime.slice(0,16)}}-{{detail.activityEndTime.slice(0,16)}}<br>
-                    报名截止: {{detail.registrationDeadline.slice(0,16)}}
+                    活动时间:{{detail.activityStartTime}}-{{detail.activityEndTime}}<br>
+                    报名截止: {{detail.registrationDeadline}}
                 </view>
             </view>
             <u-icon name="share-square" size="28"></u-icon>
@@ -83,6 +83,9 @@
             }
         },
         onUnload() {
+            uni.switchTab({
+                url: '/pages/active/index'
+            })
         },
         onLoad() {
             this.activityId = uni.getStorageSync('active_detail_id')
@@ -104,8 +107,12 @@
                 });
                 getActiveOne(params).then(res => {
                     this.detail = res
-                    this.detail.detailDesc = res.detailDesc.replace(/<img/g, '<img style="width:100%"').replace(/<p/g, '<p style="color:rgb(153, 153, 153);font-size:26rpx"')
+                    this.detail.detailDesc = res.detailDesc?res.detailDesc.replace(/<img/g, '<img style="width:100%"').replace(/<p/g, '<p style="color:rgb(153, 153, 153);font-size:26rpx"'):null
+                    this.detail.activityStartTime = res.activityStartTime.slice(0,16)
+                    this.detail.activityEndTime = res.activityEndTime.slice(0,16)
+                    this.detail.registrationDeadline = res.registrationDeadline.slice(0,16)
                 }).catch(err => {
+                    console.log(err,'-----------')
                     uni.switchTab({
                         url: '/pages/active/index'
                     })
@@ -141,9 +148,19 @@
                     })
                 } else {
 					uni.setStorageSync('active_detail_id', this.detail.id)
-                    uni.navigateTo({
-                        url: '/pages/user/register/index?type=sign'
-                    })
+                    if (uni.getStorageSync('token')) {
+                    	// uni.navigateTo({
+                    	// 	url: '/pages/active/detail/index'
+                    	// })
+                    	
+                    	uni.navigateTo({
+                    		url: '/pages/user/register/index'
+                    	})
+                    } else {
+                    	uni.navigateTo({
+                    		url: '/pages/login/authorize?route=active'
+                    	})
+                    }
                 }
 
             }

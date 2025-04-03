@@ -45,9 +45,14 @@
             }
         },
         {
-            "path": "pages/login/mobile",
+            "path": "pages/agree/terms",
             "style": {
-                "navigationBarTitleText": "手机号登录"
+                "navigationBarTitleText": "用户协议"
+            }
+        },{
+            "path": "pages/agree/privacy",
+            "style": {
+                "navigationBarTitleText": "隐私政策"
             }
         },
         {

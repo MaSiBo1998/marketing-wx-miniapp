@@ -27,7 +27,7 @@ export const request = (options) => {
 					})
                     setTimeout(() =>{
                         uni.navigateTo({
-                        	url:'/pages/login/authorize'
+                        	url:'/pages/login/authorize?route=home'
                         })
                     },1500)
 					

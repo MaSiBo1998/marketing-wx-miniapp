@@ -1,7 +1,7 @@
 <template>
     <view class="content">
         <image class="avatar-img" src="@/static/login/avatar.png" mode=""></image>
-        <button class="login-btn"  @click="toLogin()">
+        <button class="login-btn" @click="toLogin()">
             一键授权登录
         </button>
         <!-- <view class="change-mobile" @click="toMobileLogin()">
@@ -12,8 +12,10 @@
                 mode=""></image>
             <image class="active-icon" @click="isAgree = !isAgree" v-else src="@/static/login/inactive.png" mode="">
             </image>
-            我已阅读并同意<text class="text-1">
-                服务政策
+            我已阅读并同意<text class="text-1" @click="toTerms()">
+                用户协议
+            </text>和<text class="text-1" @click="toPrivacy()">
+                隐私政策
             </text>
         </view>
     </view>
@@ -27,14 +29,23 @@
         data() {
             return {
                 isAgree: false,
+                type: '',
+                currentPath:'',
             }
         },
+        onLoad(options) {
+            this.type = options.type
+            const pages = getCurrentPages(); // 获取当前页面栈
+            const currentPage = pages[pages.length - 2]; // 获取当前页面对象
+            const currentPath = currentPage.route; // 当前页面的路径
+            this.currentPath = currentPath
+            console.log(currentPath,pages)
+        },
         methods: {
-
             toLogin() {
                 if (!this.isAgree) {
                     uni.showToast({
-                        title: '请先阅读并同意协议',
+                        title: '请先阅读并同意用户协议与隐私政策',
                         icon: 'none'
                     })
                     return
@@ -59,9 +70,7 @@
                                 duration: 1200
                             });
                             uni.setStorageSync('token', res.token)
-                            uni.navigateBack({
-                            	delta: 1
-                            });
+                            this.goBackRoute()
                         }).catch(err => {
                             console.log(err, 234324)
                             uni.showToast({
@@ -73,6 +82,34 @@
                     },
 
                 });
+            },
+            goBackRoute() {
+                if(this.currentPath){
+                    if(this.currentPath == 'pages/user/index' || this.currentPath == 'pages/home/index'){
+                        uni.switchTab({
+                            url: `/${this.currentPath}`
+                        })
+                    }else{
+                        uni.redirectTo({
+                            url: `/${this.currentPath}`
+                        })
+                    }
+                }else{
+                    uni.switchTab({
+                        url: '/pages/home/index'
+                    })
+                }
+
+            },
+            toTerms(){
+                uni.navigateTo({
+                    url:'/pages/agree/terms'
+                })
+            },
+            toPrivacy(){
+                uni.navigateTo({
+                    url:'/pages/agree/privacy'
+                })
             },
 
             // 手机号登录
