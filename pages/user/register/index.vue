@@ -7,7 +7,7 @@
 					头像：
 				</view>
 				<view class="user-info-item-right" v-if="!isEdit">
-					<u-album singleSize="45" multipleSize="45" :urls="[userInfo.homeImage]" :maxCount="9"></u-album>
+					<u-album singleSize="80" multipleSize="80" :urls="[userInfo.homeImage]" :maxCount="9"></u-album>
 				</view>
 				<view class="user-info-item-right" v-else>
 					<u-upload :fileList="fileList3" @afterRead="afterRead" @delete="deletePic" name="3" multiple
@@ -17,21 +17,21 @@
 
 			<u-input :disabled="!isEdit" v-model="userInfo.name" border="none" placeholder="请输入姓名">
 				<view class="input-info" slot="prefix">
-					姓名：
+					 <text style="color: red;">*</text>姓名：
 				</view>
 			</u-input>
 			<u-input :disabled="!isEdit" v-model="userInfo.phoneNumber" border="none" placeholder="请输入手机号码"
 				type="number">
 				<view class="input-info" slot="prefix">
-					手机号码：
+					<text style="color: red;">*</text>手机号码：
 				</view>
 			</u-input>
 			<view class="user-info-item" style="align-items: center;">
-				<view class="user-info-item-left" style="width: 120rpx;">
-					性别：
+				<view class="user-info-item-left" style="width: 130rpx;">
+					<text style="color: red;">*</text>性别：
 				</view>
 				<view class="user-info-item-right" v-if="!isEdit">
-					{{userInfo.gender==1 ?'男':'女'}}
+					{{userInfo.gender==1 ?'男':(userInfo.gender===0 ?'女':'')}}
 				</view>
 				<view class="user-info-item-right" v-else>
 					<u-radio-group v-model="userInfo.gender" placement="row">
@@ -73,7 +73,7 @@
 					专业：
 				</view>
 				<view class="user-info-item-right">
-					{{userInfo.primarySkillCategory}}
+					{{userInfo.primarySkillCategory?userInfo.primarySkillCategory:''}}
 				</view>
 			</view>
             <u-input :disabled="!isEdit" v-model="userInfo.workingYears" border="none" placeholder="请输入从业年限">
@@ -153,7 +153,10 @@
 				</u-tabs>
 				<view v-if="tabIndex == 0" style="margin-top: 16rpx;">
 					<view class="user-info-item-right" v-if="!isEdit">
-						<u-album :urls="userInfo.coverImage" :maxCount="9"></u-album>
+						<u-album v-if="userInfo.coverImage &&userInfo.coverImage.length != 0" :urls="userInfo.coverImage" :maxCount="9"></u-album>
+                        <view v-else>
+                            无
+                        </view>
 					</view>
 					<view class="user-info-item-right" v-else>
 						<u-upload :previewFullImage="true" :fileList="fileList1" @afterRead="afterRead"
@@ -162,35 +165,38 @@
 				</view>
 				<view v-else style="margin-top: 16rpx;">
 					<view class="user-info-item-right" v-if="!isEdit">
-						<video id="video" :src="userInfo.videoClipUrl" controls></video>
+						<video v-if="userInfo.videoClipUrl"  id="video" :src="userInfo.videoClipUrl" controls></video>
+                        <view v-else>
+                            无
+                        </view>
 					</view>
 					<view class="user-info-item-right" v-else>
-						<u-upload accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic"
+						<u-upload  accept="video" :fileList="fileList2" @afterRead="afterRead" @delete="deletePic"
 							name="2" multiple :maxCount="1"></u-upload>
 					</view>
 				</view>
 			</view>
 			<view class="bottom-card">
-				<view v-if="type == 'register'" class="login-btn" @click="toSubmit()">
+				<!-- <view v-if="type == 'register'" class="login-btn" @click="toSubmit()">
 					立即注册
-				</view>
-				<view v-else>
-					<view v-if="isAlreadyRegister">
-						<view class="login-btn" style="background: #B3D8A8;" @click="toSignUp()">
+				</view> -->
+				<view >
+					<view>
+						<view class="login-btn" style="background: #3D8D7A;" @click="toSignUp()">
 							立即报名
 						</view>
-						<view @click="toSubmit()" class="login-btn" style="background: #B3D8A8;">
+						<view @click="toSubmit()" class="login-btn" style="background: #3D8D7A;">
 							{{ !isEdit?"编辑个人信息":'提交'}}
 						</view>
 						<view @click="isEdit = false" class="login-btn" style="background: #A3D1C6;" v-if="isEdit">
 							取消编辑
 						</view>
 					</view>
-					<view v-else>
+					<!-- <view v-else>
 						<view class="login-btn" style="background: #B3D8A8;" @click="toSignUp('sign')">
 							立即注册并报名
 						</view>
-					</view>
+					</view> -->
 
 				</view>
 			</view>
@@ -338,37 +344,37 @@
 					title: '加载中'
 				});
 				getActorOne().then(res => {
+                    this.fileList1 = []
+                    this.fileList2 = []
 					console.log(res)
 					this.userInfo = res
                     this.loading = false
-					this.userInfo.coverImage = res.coverImage.split(',')
-					this.isAlreadyRegister = res.name ? true : false
-					if (res.coverImage != '') {
+					
+					// this.isAlreadyRegister = res.name ? true : false
+                    console.log(!res.coverImage)
+					if (res.coverImage) {
+                        this.userInfo.coverImage = res.coverImage.split(',')
 						this.userInfo.coverImage.forEach(item => {
 							this.fileList1.push({
 								url: item
 							})
 						})
-					}
-					if (res.videoClipUrl != '') {
+					}else{
+                        this.userInfo.coverImage = []
+                    }
+					if (res.videoClipUrl) {
 						this.fileList2 = [{
 							url: res.videoClipUrl
 						}]
 					}
-					if (res.homeImage != '') {
+					if (res.homeImage) {
 						this.fileList3 = [{
 							url: res.homeImage
 						}]
 					}
-					if (this.isAlreadyRegister == 'register') {
-						uni.setNavigationBarTitle({
-							title: '立即注册'
-						});
-					} else {
-						uni.setNavigationBarTitle({
-							title: '立即报名'
-						});
-					}
+					uni.setNavigationBarTitle({
+						title: '立即报名'
+					});
 					uni.setStorageSync('userInfo', res)
 					console.log(this.userInfo)
 				})

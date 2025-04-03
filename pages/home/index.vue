@@ -345,9 +345,8 @@
                 max-height: 250rpx;
 
                 .case-info-title {
-                    font-size: 24rpx;
+                    font-size: 26rpx;
                     font-weight: 600;
-                    font-family: "SimSun", "宋体", serif;
                     margin-bottom: 24rpx;
                 }
 

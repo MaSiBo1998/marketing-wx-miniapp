@@ -44,7 +44,7 @@
 		<view v-if="isLogin" class="card">
 
 			<view class="user-info-item" style="align-items: center;">
-				<view class="user-info-item-left" style="width: 120rpx;">
+				<view class="user-info-item-left" style="width: 130rpx;">
 					性别：
 				</view>
 				<view class="user-info-item-right" v-if="!isEdit">
@@ -150,7 +150,10 @@
 				</u-tabs>
 				<view v-if="tabIndex == 0" style="margin-top: 16rpx;">
 					<view class="user-info-item-right" v-if="!isEdit">
-						<u-album :urls="userInfo.coverImage" :maxCount="9"></u-album>
+						<u-album v-if="userInfo.coverImage &&userInfo.coverImage.length != 0" :urls="userInfo.coverImage" :maxCount="9"></u-album>
+                        <view v-else>
+                            无
+                        </view>
 					</view>
 					<view class="user-info-item-right" v-else>
 						<u-upload :previewFullImage="true" :fileList="fileList1" @afterRead="afterRead"
@@ -160,7 +163,10 @@
 
 				<view v-else style="margin-top: 16rpx;">
 					<view class="user-info-item-right" v-if="!isEdit">
-						<video id="video" :src="userInfo.videoClipUrl" controls></video>
+						<video v-if="userInfo.videoClipUrl" id="video" :src="userInfo.videoClipUrl" controls></video>
+                        <view v-else>
+                            无
+                        </view>
 
 					</view>
 					<view class="user-info-item-right" v-else>
@@ -252,7 +258,8 @@
 					university: '',
 					primarySkillCategory: '',
 					secondarySkillCategory: '',
-					thirdlySkillCategory: ''
+					thirdlySkillCategory: '',
+                    coverImage:[]
 				},
 				imgList: [],
 				showPicker: false,
@@ -430,62 +437,6 @@
                 uni.navigateTo({
                     url:'/pages/login/authorize'
                 })
-				// let _this = this
-				// uni.getUserProfile({ //获取到用户信息
-				// 	desc: '登录后可同步数据',
-				// 	success: async (obj) => {
-				// 		let avatarUrl = obj.userInfo.avatarUrl
-				// 		let nickName = obj.userInfo.nickName
-				// 		// 调用 action ，请求登录接口
-				// 		uni.login({
-				// 			provider: 'weixin',
-				// 			success: (res) => {
-				// 				let params = {
-				// 					code: res.code,
-				// 					wxAvatarUrl: avatarUrl,
-				// 					wxNickName: nickName,
-				// 				}
-				// 				uni.showLoading({
-				// 					title: '登录中...'
-				// 				});
-
-				// 				console.log(params)
-				// 				// return
-				// 				//获取到登录凭证
-				// 				wxLoginCode(params).then(res => {
-				// 					console.log(res)
-				// 					uni.showToast({
-				// 						title: '登录成功',
-				// 						icon: 'none',
-				// 						duration: 1200
-				// 					});
-				// 					uni.setStorageSync('token', res.token)
-				// 					_this.isLogin = true
-				// 					_this.getActorOne()
-				// 				}).catch(err => {
-				// 					console.log(err, 234324)
-				// 					uni.showToast({
-				// 						title: '登录失败,请重新登录',
-				// 						icon: 'none',
-				// 						duration: 1200
-				// 					});
-				// 				})
-				// 			},
-
-				// 		});
-				// 	},
-				// 	fail: () => {
-				// 		uni.showToast({
-				// 			title: '授权已取消',
-				// 			icon: 'error',
-				// 			mask: true,
-				// 		});
-				// 	},
-				// 	complete: () => {
-				// 		// 隐藏loading
-				// 		uni.hideLoading();
-				// 	},
-				// });
 			},
 			open(index) {
 				if (!this.isEdit) {
@@ -558,17 +509,19 @@
 				getActorOne().then(res => {
 					this.fileList1 = []
 					this.fileList2 = []
-					this.fileList3 = []
 					this.userInfo = res
 					this.loading = false
-					this.userInfo.coverImage = res.coverImage.split(',')
-					if (res.coverImage != '') {
+					if (res.coverImage) {
+                        this.userInfo.coverImage = res.coverImage.split(',')
 						this.userInfo.coverImage.forEach(item => {
 							this.fileList1.push({
 								url: item
 							})
 						})
-					}
+					}else{
+                        this.userInfo.coverImage = []
+                    }
+                    console.log(this.userInfo.coverImage)
 					if (res.videoClipUrl != '') {
 						this.fileList2 = [{
 							url: res.videoClipUrl
@@ -597,6 +550,30 @@
 			},
 
 			toSubmit() {
+                if(!this.userInfo.name){
+                    uni.showToast({
+                    	title: '请先填写用户姓名',
+                    	icon: 'none',
+                    	duration: 1200
+                    })
+                    return false
+                }
+                if( !this.userInfo.phoneNumber){
+                    uni.showToast({
+                    	title: '请先填写手机号码',
+                    	icon: 'none',
+                    	duration: 1200
+                    })
+                    return false
+                }
+                if(this.userInfo.gender === ''){
+                    uni.showToast({
+                    	title: '请先填写性别',
+                    	icon: 'none',
+                    	duration: 1200
+                    })
+                    return false
+                }
 				let params = {
 					...this.userInfo
 				}
@@ -615,6 +592,11 @@
 				editActor(params).then(res => {
 					this.getActorOne()
 					this.isEdit = false
+                    uni.showToast({
+                    	title: '编辑成功',
+                    	icon: 'none',
+                    	duration: 1200
+                    })
 				})
 
 			},

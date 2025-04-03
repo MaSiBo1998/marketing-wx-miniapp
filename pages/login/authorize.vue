@@ -85,7 +85,7 @@
             },
             goBackRoute() {
                 if(this.currentPath){
-                    if(this.currentPath == 'pages/user/index' || this.currentPath == 'pages/home/index'){
+                    if(this.currentPath == 'pages/user/index' || this.currentPath == 'pages/home/index'|| this.currentPath == 'pages/active/index'){
                         uni.switchTab({
                             url: `/${this.currentPath}`
                         })
